@@ -1,0 +1,80 @@
+/*
+Author: n01sy-n3ybar
+*/
+
+body{
+	background: url("networking.jpg") no-repeat center;
+	/*background-color:#8f54cc;*/
+}
+#label{
+	color:#ffff;
+}
+#form{
+	margin-left:30px;
+}
+.intro-header{
+	color: #f8f8f8;
+	text-align:center;
+    
+}
+
+.container{
+	
+	margin-left:480px;
+	margin-top:200px;
+	margin-right:482px;
+	margin-bottom:10px;
+	padding-right:0px;
+	padding-left:0px;
+	width:auto;
+	height:700px;
+}
+.col-s12{
+	text-align:center;
+}
+.btn >.btn-default{
+	margin-left:45px;
+}
+
+.form-input{
+	width:235;
+	border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius:5px;
+    border-bottom-left-radius:5px;	
+}
+
+h1, .h1{
+	color:#8f54cc;
+}
+h3, .h3 {
+    font-size: 24px;
+	color:#f1efef;
+}
+
+.intro-divider {
+    
+    border-top: 1px solid #f8f8f8;
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+
+.navbar{
+	margin-bottom:0px;
+}
+
+.navbar-inverse{
+	border-color: rgba(255, 255, 255, .05);
+	border-radius:0px;
+	background-color: #598cb7;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color: #aec251;
+}
+
+.panel{
+	
+	width:300px;
+	height:340px;
+	background-color:rgba(255, 255, 255, .45);
+}
