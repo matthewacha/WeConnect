@@ -60,21 +60,22 @@
 		  
 	  <!--post area-->
 			<div>
-		    <div class = "panel-body">
-			  <form action="#">
-                <div class="input-group" id = "comment">
+		        <div class = "panel-body">
+			        <form action="#">
+                        <div class="input-group" id = "comment">
 				  <!--<input type="text" class="form-control" name="#"  placeholder="Input post..."required>-->
-                  <textarea class="form-control" rows="2" id="comment"  name="recipe_description" placeholder="Input business..." required></textarea>
-                  <div class="input-group-btn" >
-                      <button class="btn btn-default" id ="post" type="submit"><h6>Post</h6>
-                      </button>
-                  </div>
-                </div>
-          </form>
-			</div>
+                            <textarea class="form-control" rows="2" id="comment"  name="business_description" placeholder="Input business..." required></textarea>
+                            <div class="input-group-btn" >
+                                <button class="btn btn-default" id ="post" type="submit"><h6>Post</h6>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+			    </div>
 			</div>
 			
 			<!--posts-->
+			{%for business%}
 		    <div class = "panel-body" id = "post-display">
 			  <h2>After a highly competitive selection process, we're pleased to inform you that the admissions committee has 
 			  decided to move you onto the next stage of your journey towards becoming an Andela Developer: </h2>
@@ -93,23 +94,7 @@
 
 			    </div>
 			</div>
-            
-			<div class = "panel-body" id = "post-display">
-			  <h2>After a highly competitive selection process, we're pleased to inform you that the admissions committee has 
-			  decided to move you onto the next stage of your journey towards becoming an Andela Developer: </h2>
-			    <div class="edit-del">
-				<div class="input-group-btn">
-                    <button class="btn btn-default" type="submit">
-                      <h6>Edit</h6>
-                    </button>
-              
-                    <button class="btn btn-default" id = "del-btn" type="submit">
-                      <h6>Delete</h6>
-                    </button>
-                  
-				   <h6>Reviews <span class="badge">10</span></h6>
-				  </div>
-
+            {%endfor%}
 			    </div>
 			</div>
 		  
