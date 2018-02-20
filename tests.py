@@ -17,7 +17,7 @@ class TestUserApi(BaseTestCase):
     ###TEST SIGN UP###
     
     def test_sign_up_user(self):
-        response = self.tester.post('/api/user',content_type = 'application/json',
+        response = self.tester.post('/api/auth/register',content_type = 'application/json',
                                    data = json.dumps( dict(email='me@gmail.com',
                                                         password='greater')))
         self.assertIn(u'Successfully signed up', response.data)
@@ -31,21 +31,41 @@ class TestUserApi(BaseTestCase):
         ##############
 
     def test_incorrect_credential_login_failure(self):
-        self.tester.post('/api/user',content_type='application/json',
+        self.tester.post('/api/auth/register',content_type='application/json',
                                    data =json.dumps( dict(email='you@gmail.com',
                                                         password='lantern')))
-        response = self.tester.post('/login',
+        response = self.tester.post('/api/auth/login',
                                     content_type='application/json',
                                    data=json.dumps(dict(email='us@gmail.com',
                                                       password='amazon')))
         self.assertIn(u'Authorize with correct password',response.data)
         self.assertEqual(response.status_code, 401)
 
+    def test_password_reset(self):
+        self.tester.post('/api/auth/register',content_type='application/json',
+                                   data =json.dumps( dict(email='you@gmail.com',
+                                                        password='lantern')))
+        login = self.tester.post('/api/auth/login',
+                                    content_type='application/json',
+                                   data=json.dumps(dict(email='us@gmail.com',
+                                                      password='amazon')))
+        result = json.loads(login.data.decode())
+        
+        response = self.tester.post('/api/auth/reset_password',
+                                    content_type = 'application/json',
+                                    data = json.dumps(dict(old_password = 'amazon',
+                                                           new_password = 'laters')),
+                                    headers =dict(access_token = result['token'])
+                                    )
+
+        self.assertIn(u'Password has changed',response.data)
+        self.assertEqual(response.status_code, 200)
+
     def test_correct_credential_login(self):
-        self.tester.post('/api/user',content_type='application/json',
+        self.tester.post('/api/auth/register',content_type='application/json',
                                    data =json.dumps( dict(email='jh@gmail.com',
                                                         password='amazons')))
-        response = self.tester.post('/login',
+        response = self.tester.post('/api/auth/login',
                                     content_type='application/json',
                                    data=json.dumps(dict(email='jh@gmail.com',
                                                       password='amazons')))
@@ -53,13 +73,29 @@ class TestUserApi(BaseTestCase):
         self.assertTrue(data['token'])
         self.assertEqual(response.status_code, 200)
 
+    def test_logout_user(self):
+        self.tester.post('/api/auth/register',content_type='application/json',
+                                   data =json.dumps( dict(email='jh@gmail.com',
+                                                        password='amazons')))
+        result = self.tester.post('/api/auth/login',
+                                    content_type='application/json',
+                                   data=json.dumps(dict(email='jh@gmail.com',
+                                                      password='amazons')))
+        response = self.tester.post('/api/auth/logout',
+                                    content_type='application/json',
+                                    headers = dict(access_token = result))
+        
+        data = json.loads(response.data.decode())
+        self.assertFalse(data['token'])
+        self.assertEqual(response.status_code, 200)
+
     #ensure user_token generated on login
     def test_token_generate(self):
-        self.tester.post('/api/user',content_type='application/json',
+        self.tester.post('/api/auth/register',content_type='application/json',
                                    data =json.dumps( dict(
                                                         email='jh@gmail.com',
                                                         password='laters')))
-        response = self.tester.post('/login',
+        response = self.tester.post('/api/auth/login',
                                     content_type='application/json',
                                    data=json.dumps(dict(email='jh@gmail.com',
                                                       password='laters')))
@@ -72,30 +108,32 @@ class TestUserApi(BaseTestCase):
         #################
 
     def test_register_business(self):
-        self.tester.post('/api/user',content_type='application/json',
+        self.tester.post('/api/auth/register',content_type='application/json',
                                    data =json.dumps( dict(email='jh@gmail.com',
                                                         password='amazons')))
-        login = self.tester.post('/login',
+        login = self.tester.post('/api/auth/login',
                                  content_type= 'application/json',
                                  data=json.dumps(dict(email='jh@gmail.com',
                                                       password='amazons')))
         
         result = json.loads(login.data.decode())
-        response = self.tester.post('/api/business',content_type='application/json',
+        response = self.tester.post('/api/businesses',content_type='application/json',
                                    data =json.dumps( dict(name='Fish To Go',
-                                                        description='We sell fishy stuff')),
-                                    headers =dict(a_access_token = result))#pragma:no cover
+                                                        description='We sell fishy stuff',
+                                                          location = 'Kampala',
+                                                          category = "Food")),
+                                    headers =dict(access_token = result))#pragma:no cover
         #data = json.loads(response.data.decode())#pragma:no cover
         self.assertIn(u'Successfully added business',response.data)#pragma:no cover
         self.assertEqual(response.status_code, 200)
 
     #ensure businesses can be viewed publicly
     def test_view_businesses(self):
-        self.tester.post('/api/user',content_type='application/json',
+        self.tester.post('/api/auth/register',content_type='application/json',
                                    data =json.dumps( dict(
                                                         email='jh@gmail.com',
                                                         password='amazon')))
-        user_login = self.tester.post('/login',content_type='application/json',
+        user_login = self.tester.post('/api/auth/login',content_type='application/json',
                          data=json.dumps(dict(email='jh@gmail.com',password='amazon')))
 
         result = json.loads(user_login.data.decode())
@@ -115,11 +153,11 @@ class TestUserApi(BaseTestCase):
 
     #ensure single business can be viewed
     def test_view_single_business(self):
-        self.tester.post('/api/user',content_type='application/json',
+        self.tester.post('/api/auth/register',content_type='application/json',
                                    data =json.dumps( dict(
                                                         email='jh@gmail.com',
                                                         password='amazon')))
-        user_login = self.tester.post('/login',content_type='application/json',
+        user_login = self.tester.post('/api/auth/login',content_type='application/json',
                          data=json.dumps(dict(email='jh@gmail.com',password='amazon')))
         result = json.loads(user_login.data.decode())
         self.tester.post('/api/business',content_type='application/json',
@@ -133,7 +171,7 @@ class TestUserApi(BaseTestCase):
         self.tester.post('/api/business',content_type='application/json',
                                    data =json.dumps( dict(name='Bookshop',
                                                         description='We read')),
-                         headers =dict(access_token=result))
+                         headers =dict(access_token=result['token']))
         response = self.tester.get('/api/business/<name>',
                                    content_type='application/json',
                                    data = json.dumps(dict(name='School')))
@@ -143,11 +181,11 @@ class TestUserApi(BaseTestCase):
 
     #ensure business can be edited by logged in user
     def test_edit_business(self):
-        self.tester.post('/api/user',content_type='application/json',
+        self.tester.post('/api/auth/register',content_type='application/json',
                                    data =json.dumps( dict(
                                                         email='jh@gmail.com',
                                                         password='amazon')))#pragma:no cover
-        user_login = self.tester.post('/login',content_type='application/json',
+        user_login = self.tester.post('/api/auth/login',content_type='application/json',
                          data=json.dumps(dict(email='jh@gmail.com',password='amazon')))
 
         result = json.loads(user_login.data.decode())
@@ -170,11 +208,11 @@ class TestUserApi(BaseTestCase):
 
     #ensure business can be edited by logged in user
     def test_fail_edit_business(self):
-        self.tester.post('/api/user',content_type='application/json',
+        self.tester.post('/api/auth/register',content_type='application/json',
                                    data =json.dumps( dict(
                                                         email='jh@gmail.com',
                                                         password='amazon')))
-        user_login = self.tester.post('/login',content_type='application/json',
+        user_login = self.tester.post('/api/auth/login',content_type='application/json',
                          data=json.dumps(dict(email='jh@gmail.com',password='amazon')))
         result = json.loads(user_login.data.decode())
         self.tester.post('/api/business',content_type='application/json',
@@ -191,9 +229,35 @@ class TestUserApi(BaseTestCase):
                                                         new_name='We pray',
                                                         new_description='We raise too')),
                                    headers=dict(access_token=result))
-        data = json.loads(response.data.decode())
+        #data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 401)
         self.assertIn(u'"Business cannot be edited', response.data)
+
+    #ensure  business can be deleted by logged in user
+    def test_delete_business(self):
+        self.tester.post('/api/auth/register',content_type='application/json',
+                                   data =json.dumps( dict(
+                                                        email='jh@gmail.com',
+                                                        password='amazon')))
+        user_login = self.tester.post('/api/auth/login',
+                                      content_type='application/json',
+                                      data=json.dumps(dict(email='jh@gmail.com',password='amazon')))
+        result = json.loads(user_login.data.decode())
+        
+        self.tester.post('/api/business',content_type='application/json',
+                                   data =json.dumps( dict(name='School',
+                                                        description='baby seat')),
+                         headers =dict(access_token=result))
+        self.tester.post('/api/business',content_type='application/json',
+                                   data =json.dumps( dict(name='Bank',
+                                                        description='Sell money')),
+                         headers =dict(access_token=result))
+        response = self.tester.delete('/api/business/<name>', content_type='application/json',
+                                   data=json.dumps(dict(name='Banking')),
+                                      headers=dict(access_token=result))
+        #data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(u'successfully deleted', response.data)
 
 
 if __name__ == "__main__":
