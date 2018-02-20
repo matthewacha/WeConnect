@@ -34,7 +34,7 @@ def token_required(funct):
             return funct(current_user, *args, **kwargs)
     return decorated_funct
     
-@users.route('/api/user', methods = ['POST'])
+@users.route('/api/auth/register', methods = ['POST'])
 def add_user():
     json_data = request.get_json()
     user_profile = {'email': json_data['email'],
@@ -47,7 +47,7 @@ def add_user():
     return jsonify({"message":message})
     
 
-@users.route('/login', methods = ['POST'])
+@users.route('/api/auth/login', methods = ['POST'])
 def login():
     auth = request.get_json()
 
