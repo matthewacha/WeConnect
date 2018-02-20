@@ -134,7 +134,7 @@ class TestUserApi(BaseTestCase):
                                    data =json.dumps( dict(name='Bookshop',
                                                         description='We read')),
                          headers =dict(access_token=result))
-        response = self.tester.get('/api/recipe/<name>',
+        response = self.tester.get('/api/business/<name>',
                                    content_type='application/json',
                                    data = json.dumps(dict(name='School')))
         #data = json.loads(response.data.decode())
@@ -155,11 +155,11 @@ class TestUserApi(BaseTestCase):
                                    data =json.dumps( dict(name='Carpenter',
                                                         description='We make wood')),
                          headers =dict(access_token = result))
-        self.tester.post('/api/recipe',content_type='application/json',
+        self.tester.post('/api/business',content_type='application/json',
                                    data =json.dumps( dict(name='Biking',
                                                         description='Ride ya')),
                          headers =dict(access_token=result))
-        response = self.tester.put('/api/recipe/<name>', content_type='application/json',
+        response = self.tester.put('/api/business/<name>', content_type='application/json',
                                    data=json.dumps(dict(name='Biking',
                                                         new_name='Biking and safari',
                                                         new_description = 'riding all day')),
@@ -167,6 +167,33 @@ class TestUserApi(BaseTestCase):
         #data = json.loads(response.data.decode())#pragma:no cover
         self.assertEqual(response.status_code, 200)#pragma:no cover
         self.assertIn(u'Successfully edited', response.data)#pragma:no cover
+
+    #ensure business can be edited by logged in user
+    def test_fail_edit_business(self):
+        self.tester.post('/api/user',content_type='application/json',
+                                   data =json.dumps( dict(
+                                                        email='jh@gmail.com',
+                                                        password='amazon')))
+        user_login = self.tester.post('/login',content_type='application/json',
+                         data=json.dumps(dict(email='jh@gmail.com',password='amazon')))
+        result = json.loads(user_login.data.decode())
+        self.tester.post('/api/business',content_type='application/json',
+                                   data =json.dumps( dict(name='Church',
+                                                        description='We pray')),
+                         headers =dict(access_token = result))
+        self.tester.post('/api/business', content_type='application/json',
+                                   data =json.dumps( dict(name='Jumpers',
+                                                        description='We rob')),
+                         headers =dict(access_token=result))
+
+        response = self.tester.put('/api/business/<name>', content_type='application/json',
+                                   data=json.dumps(dict(name='Church',
+                                                        new_name='We pray',
+                                                        new_description='We raise too')),
+                                   headers=dict(access_token=result))
+        data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 401)
+        self.assertIn(u'"Business cannot be edited', response.data)
 
 
 if __name__ == "__main__":
