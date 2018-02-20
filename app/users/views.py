@@ -6,7 +6,7 @@ from flask import Flask, jsonify, request, session, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from . import users
-from app import app, models
+from app import app
 from json import dumps
 
 secret_key = "its_so_secret_1945"
@@ -28,7 +28,7 @@ def token_required(funct):
             if not token:
                 return jsonify({"message":"Token is missing"}), 401#pragma:no cover
             try:
-                data = jwt.decode(token, app.config['secret_key'])
+                data = jwt.decode(token, secret_key)
             except:
                 return jsonify({"message":"Token is invalid"}), 401
             return funct(current_user, *args, **kwargs)
@@ -37,8 +37,6 @@ def token_required(funct):
 @users.route('/api/user', methods = ['POST'])
 def add_user():
     json_data = request.get_json()
-    user = models.User(email = json_data['email'],
-                       password = generate_password_hash(json_data['password']))
     user_profile = {'email': json_data['email'],
                     'password':generate_password_hash(json_data['password']),
                     'id':generate_id(),                
