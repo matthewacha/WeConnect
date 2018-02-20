@@ -1,0 +1,39 @@
+<!DOCTYPE:html>
+<html>
+  <head>
+    <title>{{title}}</title>
+	<link rel="stylesheet" type="text/css" href="bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	
+  </head>
+  
+  <body>
+    <nav class = "navbar navbar-inverse">
+	  <div class = "container-fluid">
+	    <div class = "navbar-header">
+	      <div class = "navbar-brand">WeConnect</div>
+	    </div>
+		<ul class="nav navbar-nav navbar-right">
+		  {%block top%}{%endblock%}
+          <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+	    </ul>
+	  </div>
+	</nav>
+	
+  <div class="container" style="min-height:100% width:80%">
+	{% with messages = get_flashed_messages() %}
+	  {% if messages %}
+	    {% for message in messages %}
+		  <div class="alert alert-warning alert-dismissible" role="alert">
+			{{message}}
+		  </div>
+		{% endfor %}
+	  {% endif %}
+	{% endwith %}
+	
+  {%block body%}
+  {%endblock%}
+  </div>
+  </body>
+
+</html>

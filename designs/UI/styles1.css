@@ -1,0 +1,122 @@
+/*
+Author:n01sy-n3ybar
+*/
+
+body{
+	background: url("bckgrnd.jpg") no-repeat center;
+	/*background-color:#8f54cc;*/
+}
+
+#comment{
+	width:100%;
+}
+
+
+.edit-del{
+	margin-left:0px;
+	
+}
+
+.badge{
+	background-color:#337ab7;
+}
+
+button.btn.btn-default{
+	height:47px;
+}
+#post{
+	height:54px;
+}
+.col-lg-4{
+	width:349.33px;
+	j
+}
+
+.input-group-btn{
+	margin-right:40px;
+	width:400px;
+}
+
+.container{
+	padding-left:20px;
+}
+
+h2, .h2{
+	margin-top:0px;
+	font-size:15px;
+}
+h5, .h5{
+	font-size:20px;
+	margin-top:7px;
+	margin-bottom:7px;
+	text-align:center;
+}
+h6, .h6{
+}
+
+input.form-control{
+	height:47px;
+	width:700px;
+}
+.intro-divider {
+    
+    border-top: 1px solid #f8f8f8;
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+
+.img-circle{
+	margin-top:30px;
+	margin-left:30px;
+}
+
+.img-thumbnail{
+	padding:0px;
+	border-radius:0px;
+	border:0px;
+}
+.navbar{
+	margin-bottom:0px;
+}
+
+.navbar-inverse{
+	border-color: rgba(255, 255, 255, .05);
+	border-radius:0px;
+	background-color: #598cb7;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color: #aec251;
+}
+
+.panel{
+	border-color: rgba(255, 255, 255, .05);
+	border-radius:0px;
+	background-color:rgba(255, 255, 255, .75);
+}
+
+#post-display{
+	border-bottom:8px;
+	border-bottom-color:#aec251;
+}
+.profile-pic{
+	height:250px;
+	background-color:#f1efef;
+}
+.side-panel{
+  width: 212px;
+  height: 670px;
+  background-color:#545dcc26;  
+}
+
+.post-bar{
+  width:1050px;
+  height: 670px;
+  background-color:rgba(255, 255, 255, .90);
+	
+}
+.row{
+	width:1263px;
+}
+
+
+

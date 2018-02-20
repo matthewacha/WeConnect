@@ -1,0 +1,45 @@
+{%extends index.html%}
+{%block body%}  
+	  <!--post area-->
+			<div>
+		        <div class = "panel-body">
+			        <form action="#" method = "POST">
+                        <div class="input-group" id = "comment">
+						    <div class="form-group">
+						        <label for="business_name">Business Name</label>
+							    <input type="text" class="form-control" name="#"  placeholder = "Business name" required>
+							</div>
+				  <!--<input type="text" class="form-control" name="#"  placeholder="Input post..."required>-->
+				            <div class="form-group">
+                                <textarea class="form-control" rows="2" id="comment"  name="business_description" placeholder = "Describe business" required></textarea>
+                                    <div class="input-group-btn" >
+                                        <button class="btn btn-default" id ="post" type="submit"><h6>submit</h6>
+                                        </button>
+                                    </div>
+							</div>
+                        </div>
+                    </form>
+			    </div>
+			</div>
+			
+			<!--posts-->
+			{%for business in businesses%}
+		    <div class = "panel-body" id = "post-display">
+			  <h2>{{business.business_name}} </h2>
+			    <div class="edit-del">
+				<div class="input-group-btn">
+                    <button class="btn btn-default" type="submit">
+                      <h6>Edit</h6>
+                    </button>
+              
+                    <button class="btn btn-default" id = "del-btn" type="submit">
+                      <h6>Delete</h6>
+                    </button>
+                  
+				   <h6>Reviews <span class="badge">5</span></h6>
+				  </div>
+
+			    </div>
+			</div>
+            {%endfor%}
+{%endblock%}

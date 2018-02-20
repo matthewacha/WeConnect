@@ -1,0 +1,30 @@
+{%extends index.html%}
+{%block body%}
+	  <!--post-bar-->
+	  
+	  <div class = "col-lg-10">
+	    <div class = "post-bar">
+		  <div class ="panel">
+			<!--posts-->
+			<div class  = "panel panel-default"> 
+			  <div class = "panel-heading">Fish To Go</div>
+			  <div class = "panel-body"><h2>After a highly competitive selection process, we're pleased to inform you that the admissions committee has 
+			  decided to move you onto the next stage of your journey towards becoming an Andela Developer: </h2>
+			  </div>
+			  <div class="edit-del">
+			      <div class="input-group-btn">
+				      <button class="btn btn-default" type="submit">
+                          <h6>Edit</h6>
+                      </button>
+				  </div>
+			  
+			  </div>
+			</div>
+				
+			{%for review in reviews%}	  
+		    <div class = "panel-body" id = "post-display">
+			  <h2>These are the reviews.  </h2>
+			</div>
+            {%endfor%}
+		  
+{%endblock%}
