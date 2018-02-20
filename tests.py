@@ -137,9 +137,36 @@ class TestUserApi(BaseTestCase):
         response = self.tester.get('/api/recipe/<name>',
                                    content_type='application/json',
                                    data = json.dumps(dict(name='School')))
-        data = json.loads(response.data.decode())
+        #data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 200)
         self.assertIn(u'We teach', response.data)
+
+    #ensure business can be edited by logged in user
+    def test_edit_business(self):
+        self.tester.post('/api/user',content_type='application/json',
+                                   data =json.dumps( dict(
+                                                        email='jh@gmail.com',
+                                                        password='amazon')))#pragma:no cover
+        user_login = self.tester.post('/login',content_type='application/json',
+                         data=json.dumps(dict(email='jh@gmail.com',password='amazon')))
+
+        result = json.loads(user_login.data.decode())
+        self.tester.post('/api/business',content_type='application/json',
+                                   data =json.dumps( dict(name='Carpenter',
+                                                        description='We make wood')),
+                         headers =dict(access_token = result))
+        self.tester.post('/api/recipe',content_type='application/json',
+                                   data =json.dumps( dict(name='Biking',
+                                                        description='Ride ya')),
+                         headers =dict(access_token=result))
+        response = self.tester.put('/api/recipe/<name>', content_type='application/json',
+                                   data=json.dumps(dict(name='Biking',
+                                                        new_name='Biking and safari',
+                                                        new_description = 'riding all day')),
+                                   headers=dict(access_token=result))#pragma:no cover
+        #data = json.loads(response.data.decode())#pragma:no cover
+        self.assertEqual(response.status_code, 200)#pragma:no cover
+        self.assertIn(u'Successfully edited', response.data)#pragma:no cover
 
 
 if __name__ == "__main__":
