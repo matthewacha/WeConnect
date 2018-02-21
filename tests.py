@@ -59,36 +59,40 @@ class TestUserApi(BaseTestCase):
                                                         password='lantern')))
         login = self.tester.post('/api/auth/login',
                                     content_type='application/json',
-                                   data=json.dumps(dict(email='us@gmail.com',
-                                                      password='amazon')))
+                                   data=json.dumps(dict(email='you@gmail.com',
+                                                      password='lantern')))
         result = json.loads(login.data.decode())
         
-        response = self.tester.post('/api/auth/reset_password',
+        response = self.tester.post('/api/auth/reset-password',
                                     content_type = 'application/json',
-                                    data = json.dumps(dict(old_password = 'amazon',
+                                    data = json.dumps(dict(email = 'you@gmail.com',
+                                                           old_password = 'amazon',
                                                            new_password = 'laters')),
                                     headers =dict(access_token = result['token'])
                                     )
 
-        self.assertIn(u'Password has changed',response.data)
+        self.assertIn(u'Successfully changed password',response.data)
         self.assertEqual(response.status_code, 200)
 
 
-"""
+
     def test_logout_user(self):
         self.tester.post('/api/auth/register',content_type='application/json',
                                    data =json.dumps( dict(email='jh@gmail.com',
                                                         password='amazons')))
-        result = self.tester.post('/api/auth/login',
+        login = self.tester.post('/api/auth/login',
                                     content_type='application/json',
                                    data=json.dumps(dict(email='jh@gmail.com',
                                                       password='amazons')))
+        result = json.loads(login.data.decode())
+
         response = self.tester.post('/api/auth/logout',
-                                    content_type='application/json',
-                                    headers = dict(access_token = result))
+                                    content_type = 'application/json',
+                                    headers = dict(access_token = result['token']))
         
         data = json.loads(response.data.decode())
         self.assertFalse(data['token'])
+        self.assertIn(u'Successfully logged out', response.data)
         self.assertEqual(response.status_code, 200)
 
     #ensure user_token generated on login
@@ -104,7 +108,7 @@ class TestUserApi(BaseTestCase):
         data = json.loads(response.data.decode())
         self.assertTrue(data['token'])
         self.assertEqual(response.status_code, 200)
-
+"""
         #################
         ##TEST BUSINESS##
         #################
