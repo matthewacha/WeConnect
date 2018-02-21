@@ -6,10 +6,10 @@ from flask import Flask, jsonify, request, session, make_response, abort
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from . import users
-from app import app
 from json import dumps
 
 secret_key = "its_so_secret_1945"
+
 database = []
 
 ###helper methods###
@@ -25,27 +25,29 @@ class User(object):
                 self.password = password
 
         def change_password(self, new_password):
-                password = new_password
+                self.password = new_password
                
         def email(self):
                 return self.email
+        
         def password(self):
                 return self.password
 
 class Business(object):
-        def __init__(self, name, location, category):
+        def __init__(self, name,description, location, category):
                 self.name = name
+                self.description = description
                 self.location = location
                 self.category = category
 
         def change_name(self,new_name):
-                name = self.new_name
-                return name
+                self.name = new_name
+                
         def change_location(self,new_location):
-                location = self.location
-                return location
+                self.location = location
+                
         def change_category(self,new_category):
-                category = self.new_category
+                self.category = new_category
 
 def token_required(funct):
     @wraps(funct)
@@ -57,15 +59,10 @@ def token_required(funct):
                 return jsonify({"message":"Token is missing"}), 401#pragma:no cover
             try:
                 data = jwt.decode(token, secret_key)
-                user_profiles = []
                 for user in database:
-                        user_profiles.append({'email':user['details'].email,
-                                  'password':user['details'].password,
-                                  'user_id':user['id'],
-                                  'businesses':user['businesses']})
-                for user in user_profiles:
-                        if user['user_id'] == data['sub']:
+                        if user['user_id'] == data["sub"]:
                                 current_user = user
+                                return funct(current_user, *args, **kwargs)
             except:
                 return jsonify({"message":"Token is invalid"}), 401
             return funct(current_user, *args, **kwargs)
@@ -128,5 +125,5 @@ def logout():
         if 'access_token' in request.headers:
             token = request.headers['access_token']
             token = None
-            return jsonify({'token':token,'message':"Successfully logged out"})
+            return jsonify({'message':"Successfully logged out"})
         return make_response(("Not logged out"), 200)
