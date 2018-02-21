@@ -98,16 +98,15 @@ class TestUserApi(BaseTestCase):
     #ensure user_token generated on login
     def test_token_generate(self):
         self.tester.post('/api/auth/register',content_type='application/json',
-                                   data =json.dumps( dict(
-                                                        email='jh@gmail.com',
-                                                        password='laters')))
-        response = self.tester.post('/api/auth/login',
+                                   data =json.dumps( dict(email='jh@gmail.com',
+                                                        password='amazons')))
+        login = self.tester.post('/api/auth/login',
                                     content_type='application/json',
                                    data=json.dumps(dict(email='jh@gmail.com',
-                                                      password='laters')))
-        data = json.loads(response.data.decode())
-        self.assertTrue(data['token'])
-        self.assertEqual(response.status_code, 200)
+                                                      password='amazons')))
+        result = json.loads(login.data.decode())
+        self.assertTrue(result['token'])
+        self.assertEqual(login.status_code, 200)
 """
         #################
         ##TEST BUSINESS##
