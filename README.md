@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/matthewacha/WeConnect.svg?branch=ft-backend)](https://travis-ci.org/matthewacha/WeConnect)
+
 # WeConnect
 WeConnect provides a platform that brings businesses and individuals 
 together. 
@@ -14,13 +16,17 @@ to write reviews about the businesses they have interacted with.
 
 
 PRE-REQUISITES
+
 For developers, you need to have installed the following
+
 1. Python 2.7
+
 2. GitSys
 
 Setup and Installation
 
 clone the repo
+
 $git clone https://github.com/matthewacha/WeConnect.git
 
 For windows, run the setup.bat file to demo on your local server
@@ -28,6 +34,7 @@ For windows, run the setup.bat file to demo on your local server
 For Linux, cygwin, OS X run setup.sh file to demo 
 
 DEMO
+
 1.To start, signup with your email and password
 
 2.Login into your new account
