@@ -21,8 +21,10 @@ class TestUserApi(BaseTestCase):
         self.assertEqual(user.email,'james@gmail.com' )
 
     def test_Businesses(self):
-        business = users.Business("Fish To Go", "Kampala", "Foods")
+        business = users.Business("Fish To Go","We fish", "Kampala", "Foods")
         self.assertEqual(business.name, "Fish To Go")
+        new_name = business.change_name("Fishes")
+        self.assertEqual(business.name, "Fishes")
 
     
     ################
@@ -103,7 +105,7 @@ class TestUserApi(BaseTestCase):
                                     headers = dict(access_token = result['token']))
         
         data = json.loads(response.data.decode())
-        self.assertFalse(data['token'])
+        self.assertTrue(data['message'])
         self.assertIn(u'Successfully logged out', response.data)
         self.assertEqual(response.status_code, 200)
 
@@ -119,7 +121,7 @@ class TestUserApi(BaseTestCase):
         result = json.loads(login.data.decode())
         self.assertTrue(result['token'])
         self.assertEqual(login.status_code, 200)
-"""
+
         #################
         ##TEST BUSINESS##
         #################
@@ -143,7 +145,7 @@ class TestUserApi(BaseTestCase):
         #data = json.loads(response.data.decode())#pragma:no cover
         self.assertIn(u'Successfully added business',response.data)#pragma:no cover
         self.assertEqual(response.status_code, 200)
-
+"""
     #ensure businesses can be viewed publicly
     def test_view_businesses(self):
         self.tester.post('/api/auth/register',content_type='application/json',
