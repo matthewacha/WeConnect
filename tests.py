@@ -145,7 +145,7 @@ class TestUserApi(BaseTestCase):
         data = json.loads(response.data.decode())#pragma:no cover
         self.assertIn(u'Successfully added business',response.data)#pragma:no cover
         self.assertEqual(response.status_code, 200)
-"""
+
     #ensure businesses can be viewed publicly
     def test_view_businesses(self):
         self.tester.post('/api/auth/register',content_type='application/json',
@@ -166,7 +166,7 @@ class TestUserApi(BaseTestCase):
                                    data =json.dumps( dict(name='School',
                                                         description='We teach',
                                                           location = 'Kampala',
-                                                          category = "Food")),
+                                                          category = "Educate")),
                          headers=dict(access_token=result['token']))
         response = self.tester.get('/api/businesses',
                                   content_type='application/json',
@@ -175,7 +175,7 @@ class TestUserApi(BaseTestCase):
         data = json.loads(response.data.decode())
         self.assertIn(u'School', response.data)
         self.assertEqual(response.status_code, 200)
-
+"""
     #ensure single business can be viewed
     def test_view_single_business(self):
         self.tester.post('/api/auth/register',content_type='application/json',
