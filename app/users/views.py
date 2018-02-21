@@ -34,11 +34,12 @@ class User(object):
                 return self.password
 
 class Business(object):
-        def __init__(self, name,description, location, category):
+        def __init__(self, name,description, location, category, user_id):
                 self.name = name
                 self.description = description
                 self.location = location
                 self.category = category
+                self.user_id = user_id
 
         def change_name(self,new_name):
                 self.name = new_name
@@ -59,10 +60,8 @@ def token_required(funct):
                 return jsonify({"message":"Token is missing"}), 401#pragma:no cover
             try:
                 data = jwt.decode(token, secret_key)
-                for user in database:
-                        if user['user_id'] == data["sub"]:
-                                current_user = user
-                                #return funct(current_user, *args, **kwargs)
+                user =[user for user in database if user['user_id'] == data["sub"]]
+                current_user = user[0]
             except:
                 return jsonify({"message":"Token is invalid"}), 401
             return funct(current_user, *args, **kwargs)
