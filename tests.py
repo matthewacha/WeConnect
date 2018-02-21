@@ -21,7 +21,7 @@ class TestUserApi(BaseTestCase):
         self.assertEqual(user.email,'james@gmail.com' )
 
     def test_Businesses(self):
-        business = users.Business("Fish To Go","We fish", "Kampala", "Foods")
+        business = users.Business("Fish To Go","We fish", "Kampala", "Foods",1111)
         self.assertEqual(business.name, "Fish To Go")
         new_name = business.change_name("Fishes")
         self.assertEqual(business.name, "Fishes")
@@ -80,7 +80,7 @@ class TestUserApi(BaseTestCase):
         response = self.tester.post('/api/auth/reset-password',
                                     content_type = 'application/json',
                                     data = json.dumps(dict(email = 'you@gmail.com',
-                                                           old_password = 'amazon',
+                                                           old_password = 'lantern',
                                                            new_password = 'laters')),
                                     headers =dict(access_token = result['token'])
                                     )
@@ -137,12 +137,12 @@ class TestUserApi(BaseTestCase):
         
         result = json.loads(login.data.decode())
         response = self.tester.post('/api/businesses',content_type='application/json',
-                                   data =json.dumps( dict(name='Fish To Go',
+                                   data = json.dumps( dict(name='Fish To Go',
                                                         description='We sell fishy stuff',
                                                           location = 'Kampala',
                                                           category = "Food")),
-                                    headers =dict(access_token = result))#pragma:no cover
-        #data = json.loads(response.data.decode())#pragma:no cover
+                                    headers =dict(access_token = result['token']))#pragma:no cover
+        data = json.loads(response.data.decode())#pragma:no cover
         self.assertIn(u'Successfully added business',response.data)#pragma:no cover
         self.assertEqual(response.status_code, 200)
 """
@@ -156,17 +156,23 @@ class TestUserApi(BaseTestCase):
                          data=json.dumps(dict(email='jh@gmail.com',password='amazon')))
 
         result = json.loads(user_login.data.decode())
-        self.tester.post('/api/business',content_type='application/json',
+        self.tester.post('/api/businesses',content_type='application/json',
                                    data =json.dumps( dict(name='Restaurant',
-                                                        description='We cook')),
-                         headers =dict(access_token=result))
-        self.tester.post('/api/business',content_type='application/json',
+                                                        description='We cook',
+                                                          location = 'Kampala',
+                                                          category = "Food")),
+                         headers =dict(access_token=result['token']))
+        self.tester.post('/api/businesses',content_type='application/json',
                                    data =json.dumps( dict(name='School',
-                                                        description='We teach')),
-                         headers=dict(access_token=result))
-        response = self.tester.get('/api/business',
-                                  content_type='application/json')
-        #data = json.loads(response.data.decode())
+                                                        description='We teach',
+                                                          location = 'Kampala',
+                                                          category = "Food")),
+                         headers=dict(access_token=result['token']))
+        response = self.tester.get('/api/businesses',
+                                  content_type='application/json',
+                                   headers=dict(access_token=result['token']))
+        
+        data = json.loads(response.data.decode())
         self.assertIn(u'School', response.data)
         self.assertEqual(response.status_code, 200)
 
