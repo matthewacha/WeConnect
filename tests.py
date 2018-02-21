@@ -2,8 +2,7 @@ import os
 import unittest
 import json
 from app import app, users
-
-
+from app.users import views as users
     
 
 class BaseTestCase(unittest.TestCase):
@@ -14,8 +13,21 @@ class BaseTestCase(unittest.TestCase):
         users.database = []
 
 class TestUserApi(BaseTestCase):
-    ###TEST SIGN UP###
+    ################
+    ##TEST ClASSES##
+    ################
+    def test_Users(self):
+        user = users.User('james@gmail.com', 'latina' )
+        self.assertEqual(user.email,'james@gmail.com' )
+
+    def test_Businesses(self):
+        business = users.Business("Fish To Go", "Kampala", "Foods")
+        self.assertEqual(business.name, "Fish To Go")
+
     
+    ################
+    ##TEST SIGN UP##
+    ################
     def test_sign_up_user(self):
         response = self.tester.post('/api/auth/register',content_type = 'application/json',
                                    data = json.dumps( dict(email='me@gmail.com',
