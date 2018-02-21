@@ -62,7 +62,7 @@ def token_required(funct):
                 for user in database:
                         if user['user_id'] == data["sub"]:
                                 current_user = user
-                                return funct(current_user, *args, **kwargs)
+                                #return funct(current_user, *args, **kwargs)
             except:
                 return jsonify({"message":"Token is invalid"}), 401
             return funct(current_user, *args, **kwargs)
@@ -79,7 +79,7 @@ def add_user():
     database.append(user_profile)
     message = 'Successfully signed up'
 
-    return jsonify({"message":message})
+    return jsonify({"message":"Successfully signed up"})
     
 
 @users.route('/api/auth/login', methods = ['POST'])
@@ -108,20 +108,19 @@ def login():
         return make_response(("Authorize with correct password"), 401)
 
 @users.route('/api/auth/reset-password', methods = ['POST'])
-#@token_required
-def reset_password():
+@token_required
+def reset_password(current_user):
         cred = request.get_json()
         if not cred or not cred['email'] or not cred['old_password'] or not cred['new_password']:
                 return make_response(("Please input passwords"), 401)
-        for user in database:
-                if user['details'].email == cred['email']:
-                        user['details'].change_password(generate_password_hash(cred['new_password']))
-                        return make_response(("Successfully changed password"), 200)
+        if cred['email'] == current_user['details'].email:
+                current_user['details'].change_password(generate_password_hash(cred['new_password']))
+                return make_response(("Successfully changed password"), 200)
 
 
 @users.route('/api/auth/logout', methods = ['POST'])
-#@token_required
-def logout():
+@token_required
+def logout(current_user):
         if 'access_token' in request.headers:
             token = request.headers['access_token']
             token = None
