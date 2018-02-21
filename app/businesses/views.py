@@ -22,21 +22,32 @@ def register(current_user):
     
     return jsonify({'message':"Successfully added business"})
 
-"""
+
 @businesses.route('/api/businesses', methods = ['GET'])
 @token_required
 def retrieve(current_user):
-    businesses = [user['businesses'] for user in database if user['details'].email == current_user['details'].email]
+    output = []
+    for business in businesses_db:
+        business_={
+        "name":business['details'].name,
+        "description":business['details'].description,
+        "location":business['details'].location,
+        "category":business['details'].category,
+        "user_id":business['details'].user_id,
+        "businessId":business['biz_id'],
+        "reviews":business['reviews']}
+        output.append(business_)
+        
 
-    return jsonify({"businesses":businesses})
+    return jsonify({"businesses":output})
 
-
+"""
 @businesses.route('/api/businesses/<businessId>', methods = ['GET'])
 @token_required
 def retrieve_business(current_user,businessId):
     business = 'business'
     return jsonify({"business":business})
-
+businesses = [user['businesses'] for business in businesses if user['details'].email == current_user['details'].email]
 @businesses.route('/api/businesses/<businessId>/reviews', methods = ['POST'])
 @token_required
 def post_review(current_user, businessId):
