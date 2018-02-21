@@ -25,8 +25,8 @@ class User(object):
                 self.password = password
 
         def change_password(self, new_password):
-                password = self.new_password
-                return password
+                password = new_password
+               
         def email(self):
                 return self.email
         def password(self):
@@ -91,18 +91,18 @@ def login():
         if not auth or not auth['email'] or not auth['password']:
                 return make_response(("Authorize with email and password"), 401)
 
-        user_profiles = []
+        """user_profiles = []
         for user in database:
                 user_profiles.append({'email':user['details'].email,
                                   'password':user['details'].password,
                                   'user_id':user['user_id'],
-                                  'businesses':user['businesses']})
+                                  'businesses':user['businesses']})"""
 
-        user = [user for user in user_profiles if user['email'] == auth['email']]
+        user = [user for user in database if user['details'].email == auth['email']]
         if len(user) == 0 :
                 return make_response(("Authorize with correct credentials"), 401)
         info = user[0]
-        if check_password_hash(info['password'], auth['password']):
+        if check_password_hash(info['details'].password, auth['password']):
                 token = jwt.encode({
                         "exp": datetime.datetime.utcnow() + datetime.timedelta(days = 0, minutes = 45),
                         "iat": datetime.datetime.utcnow(),
@@ -110,10 +110,23 @@ def login():
                 return jsonify({'token':token})
         return make_response(("Authorize with correct password"), 401)
 
+@users.route('/api/auth/reset-password', methods = ['POST'])
+#@token_required
+def reset_password():
+        cred = request.get_json()
+        if not cred or not cred['email'] or not cred['old_password'] or not cred['new_password']:
+                return make_response(("Please input passwords"), 401)
+        for user in database:
+                if user['details'].email == cred['email']:
+                        user['details'].change_password(generate_password_hash(cred['new_password']))
+                        return make_response(("Successfully changed password"), 200)
+
+
 @users.route('/api/auth/logout', methods = ['POST'])
+#@token_required
 def logout():
         if 'access_token' in request.headers:
             token = request.headers['access_token']
             token = None
-        
-        return make_response(("Successfully logged out"), 200)
+            return jsonify({'token':token,'message':"Successfully logged out"})
+        return make_response(("Not logged out"), 200)
