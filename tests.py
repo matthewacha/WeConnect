@@ -175,35 +175,38 @@ class TestUserApi(BaseTestCase):
         data = json.loads(response.data.decode())
         self.assertIn(u'School', response.data)
         self.assertEqual(response.status_code, 200)
-"""
-    #ensure single business can be viewed
-    def test_view_single_business(self):
+
+    #ensure business Id cannot be viewed
+    def test_view_wrong_business(self):
         self.tester.post('/api/auth/register',content_type='application/json',
                                    data =json.dumps( dict(
                                                         email='jh@gmail.com',
                                                         password='amazon')))
         user_login = self.tester.post('/api/auth/login',content_type='application/json',
                          data=json.dumps(dict(email='jh@gmail.com',password='amazon')))
-        result = json.loads(user_login.data.decode())
-        self.tester.post('/api/business',content_type='application/json',
-                                   data =json.dumps( dict(name='School',
-                                                        description='We teach')),
-                         headers =dict(access_token=result))
-        self.tester.post('/api/business',content_type='application/json',
-                                   data =json.dumps( dict(name='Restaurant',
-                                                        description='We cook')),
-                         headers =dict(access_token=result))
-        self.tester.post('/api/business',content_type='application/json',
-                                   data =json.dumps( dict(name='Bookshop',
-                                                        description='We read')),
-                         headers =dict(access_token=result['token']))
-        response = self.tester.get('/api/business/<name>',
-                                   content_type='application/json',
-                                   data = json.dumps(dict(name='School')))
-        #data = json.loads(response.data.decode())
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(u'We teach', response.data)
 
+        result = json.loads(user_login.data.decode())
+        self.tester.post('/api/businesses',content_type='application/json',
+                                   data =json.dumps( dict(name='Restaurant',
+                                                        description='We cook',
+                                                          location = 'Kampala',
+                                                          category = "Food")),
+                         headers =dict(access_token=result['token']))
+        self.tester.post('/api/businesses',content_type='application/json',
+                                   data =json.dumps( dict(name='School',
+                                                        description='We teach',
+                                                          location = 'Kampala',
+                                                          category = "Educate",
+                                                          businessId = 123)),
+                         headers=dict(access_token=result['token']))
+        response = self.tester.get('/api/businesses/123',
+                                  content_type='application/json',
+                                   headers=dict(access_token=result['token']))
+        
+        data = json.loads(response.data.decode())
+        self.assertIn(u'Id does not exist', response.data)
+        self.assertEqual(response.status_code, 200)
+"""
     #ensure business can be edited by logged in user
     def test_edit_business(self):
         self.tester.post('/api/auth/register',content_type='application/json',
