@@ -24,8 +24,8 @@ def register(current_user):
 
 
 
-@businesses.route('/api/businesses/<businessId>', methods = ['GET'])
-def retrieve_business(businessId):
+@businesses.route('/api/businesses/<name>', methods = ['GET'])
+def retrieve_business(name):
     output = []
     for business in businesses_db:
         business_={
@@ -41,13 +41,14 @@ def retrieve_business(businessId):
     business_out = []
 
     for business in output:
-        for key,value in business.iteritems():
-            if business["businessId"] == businessId:
-                business_out.append(business)
-            else:
-                business_out.append("Id does not exist")
+        if business["name"] == name:
+            business_out.append(business)
 
-    return jsonify({"business":business_out[0]})
+    if len(business_out) == 0:
+        message = "Business does not exist"
+    else:
+        message = business_out
+    return jsonify({"business":message[0]})
 
 @businesses.route('/api/businesses', methods = ['GET'])
 def retrieve_businesses():
@@ -72,7 +73,7 @@ def edit_business(current_user, name):
     data = request.get_json()
     
     for business in businesses_db:
-        if business['details'].name == name:
+        if business['details'].user_id == current_user['user_id'] and business['details'].name == name:
             if data['new_name']:
                 business['details'].name = data['new_name']
             if data['new_description']:
@@ -86,7 +87,7 @@ def edit_business(current_user, name):
 @token_required
 def delete_business(current_user, name):
     for business in businesses_db:
-        if business["details"].name == name:
+        if business['details'].user_id == current_user['user_id'] and business["details"].name == name:
             businesses_db.remove(business)
             message = "Successfully deleted"
     return jsonify({"message":message})
