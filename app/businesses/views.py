@@ -45,7 +45,7 @@ def retrieve_business(name):
             business_out.append(business)
 
     if len(business_out) == 0:
-        message = "Business does not exist"
+        message = ["Business does not exist"]
     else:
         message = business_out
     return jsonify({"business":message[0]})
