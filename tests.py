@@ -172,7 +172,8 @@ class TestUserApi(BaseTestCase):
                                   content_type='application/json',
                                    headers=dict(access_token=result['token']))
         
-        data = json.loads(response.data.decode())
+
+        #data = json.loads(response.data.decode())
         self.assertIn(u'School', response.data)
         self.assertEqual(response.status_code, 200)
 
@@ -224,14 +225,14 @@ class TestUserApi(BaseTestCase):
                                                  category = "Food")),
                          headers = dict(access_token=result['token']))
         
-        response = self.tester.post('/api/businesses/8/reviews',
+        response = self.tester.post('/api/businesses/Restaurant/reviews',
                                     content_type = 'application/json',
                                     data = json.dumps(dict(review = "It's awesome")),
                                     headers = dict(access_token = result['token']))
-        data = json.loads(response.data.decode())
+        #data = json.loads(response.data.decode())
         self.assertIn(u'Successfully added review', response.data)
         self.assertEqual(response.status_code, 200)
-"""
+
     #ensure business can be edited by logged in user
     def test_edit_business(self):
         self.tester.post('/api/auth/register',content_type='application/json',
@@ -259,10 +260,10 @@ class TestUserApi(BaseTestCase):
         response = self.tester.put('/api/businesses/School', content_type='application/json',
                                    headers=dict(access_token=result['token']))#pragma:no cover
         
-        data = json.loads(response.data.decode())#pragma:no cover
+        #data = json.loads(response.data.decode())#pragma:no cover
         self.assertEqual(response.status_code, 200)#pragma:no cover
         self.assertIn(u'Successfully edited', response.data)#pragma:no cover
-
+"""
     #ensure business can be edited by logged in user
     def test_fail_edit_business(self):
         self.tester.post('/api/auth/register',content_type='application/json',
