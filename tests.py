@@ -245,6 +245,39 @@ class TestUserApi(BaseTestCase):
         self.assertEqual(response.status_code, 200)#pragma:no cover
         self.assertIn(u'Successfully edited', response.data)#pragma:no cover
 
+    #ensure business can be deleted by logged in user
+    def test_delete_business(self):
+        self.tester.post('/api/auth/register',content_type='application/json',
+                                   data =json.dumps( dict(
+                                                        email='jh@gmail.com',
+                                                        password='amazon')))
+        user_login = self.tester.post('/api/auth/login',content_type='application/json',
+                         data=json.dumps(dict(email='jh@gmail.com',password='amazon')))
+
+        result = json.loads(user_login.data.decode())
+        self.tester.post('/api/businesses',content_type='application/json',
+                                   data = json.dumps( dict(name='Restaurant',
+                                                        description='We cook',
+                                                          location = 'Kampala',
+                                                          category = "Food")),
+                         headers = dict(access_token=result['token']))
+        
+        self.tester.post('/api/businesses',content_type='application/json',
+                                   data = json.dumps( dict(name='School',
+                                                        description='We teach',
+                                                          location = 'Kampala',
+                                                          category = "Educate")),
+                         headers = dict(access_token=result['token']))
+
+        response = self.tester.delete('/api/businesses/School', content_type='application/json',
+                                   headers=dict(access_token=result['token']))#pragma:no cover
+        
+        #data = json.loads(response.data.decode())#pragma:no cover
+        self.assertEqual(response.status_code, 200)#pragma:no cover
+        self.assertIn(u'Successfully deleted', response.data)#pragma:no cover
+
+        #####TEST REVIEWS#####
+
     #ensure reviews can be added for business
     def test_add_review(self):
         self.tester.post('/api/auth/register',content_type='application/json',
