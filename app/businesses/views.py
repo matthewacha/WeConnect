@@ -68,30 +68,20 @@ def retrieve_business(current_user, businessId):
 
     return jsonify({"business":business_out[0]})
 
-"""
-@businesses.route('/api/businesses/<businessId>/reviews', methods = ['POST'])
+
+@businesses.route('/api/businesses/<name>/reviews', methods = ['POST'])
 @token_required
-def post_review(current_user, businessId):
+def post_review(current_user, name):
     data = request.get_json()
     review = data['review']
     for business in businesses_db:
-        for key,value in businesses_db.iteritems():
-            if business["businessId"] == businessId:
-                business['reviews'].append(review)
-        
-
-    business_out = []
-
-    for business in ou:
         for key,value in business.iteritems():
-            if business["businessId"] == businessId:
-                business_out.append(business)
-            else:
-                business_out.append("Id does not exist")
-    message = "message"
+            if business["details"].name == name:
+                business['reviews'].append(review)
+                message = "Successfully added review"
     return jsonify({"message":message})
 
-
+"""
 @businesses.route('/api/businesses/<businessId>', methods = ['GET'])
 @token_required
 def get_reviews(current_user, businessId):
