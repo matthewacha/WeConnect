@@ -25,7 +25,7 @@ def register(current_user):
 
 @businesses.route('/api/businesses', methods = ['GET'])
 @token_required
-def retrieve(current_user):
+def retrieve_businesses(current_user):
     output = []
     for business in businesses_db:
         business_={
@@ -41,18 +41,56 @@ def retrieve(current_user):
 
     return jsonify({"businesses":output})
 
-"""
+
 @businesses.route('/api/businesses/<businessId>', methods = ['GET'])
 @token_required
-def retrieve_business(current_user,businessId):
-    business = 'business'
-    return jsonify({"business":business})
-businesses = [user['businesses'] for business in businesses if user['details'].email == current_user['details'].email]
+def retrieve_business(current_user, businessId):
+    output = []
+    for business in businesses_db:
+        business_={
+        "name":business['details'].name,
+        "description":business['details'].description,
+        "location":business['details'].location,
+        "category":business['details'].category,
+        "user_id":business['details'].user_id,
+        "businessId":business['biz_id'],
+        "reviews":business['reviews']}
+        output.append(business_)
+
+    business_out = []
+
+    for business in output:
+        for key,value in business.iteritems():
+            if business["businessId"] == businessId:
+                business_out.append(business)
+            else:
+                business_out.append("Id does not exist")
+
+    return jsonify({"business":business_out[0]})
+
+"""
 @businesses.route('/api/businesses/<businessId>/reviews', methods = ['POST'])
 @token_required
 def post_review(current_user, businessId):
+    data = request.get_json()
+    review = data['review']
+    for business in businesses_db:
+        for key,value in businesses_db.iteritems():
+            if business["businessId"] == businessId:
+                business['reviews'].append(review)
+        
+
+    business_out = []
+
+    for business in ou:
+        for key,value in business.iteritems():
+            if business["businessId"] == businessId:
+                business_out.append(business)
+            else:
+                business_out.append("Id does not exist")
     message = "message"
     return jsonify({"message":message})
+
 
 @businesses.route('/api/businesses/<businessId>', methods = ['GET'])
 @token_required
