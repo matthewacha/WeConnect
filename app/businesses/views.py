@@ -73,15 +73,21 @@ def edit_business(current_user, name):
     data = request.get_json()
     
     for business in businesses_db:
-        if business['details'].user_id == current_user['user_id'] and business['details'].name == name:
-            if data['new_name']:
-                business['details'].name = data['new_name']
-            if data['new_description']:
-                business['details'].description = data['new_description']
-            if data['new_location']:
-                business['details'].category = data['new_category']
+        if business['details'].user_id == current_user['user_id']:
+            if business['details'].name == name:
+                if data['new_name']:
+                    business['details'].name = data['new_name']
+                if data['new_description']:
+                    business['details'].description = data['new_description']
+                if data['new_location']:
+                    business['details'].category = data['new_category']
+                    message = "Successfully edited"
+            else:
+                message = "Business does not exist"
+        else:
+            message = "You do not have authorization"
                 
-    return jsonify({"message": "Successfully edited"})
+    return jsonify({"message":message })
 
 @businesses.route('/api/businesses/<name>', methods = ['DELETE'])
 @token_required
@@ -90,6 +96,8 @@ def delete_business(current_user, name):
         if business['details'].user_id == current_user['user_id'] and business["details"].name == name:
             businesses_db.remove(business)
             message = "Successfully deleted"
+        else:
+            message = "You are not authorized"
     return jsonify({"message":message})
 
 @businesses.route('/api/businesses/<name>/reviews', methods = ['POST'])
