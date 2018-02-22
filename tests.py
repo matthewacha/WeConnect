@@ -206,31 +206,60 @@ class TestUserApi(BaseTestCase):
         data = json.loads(response.data.decode())
         self.assertIn(u'Id does not exist', response.data)
         self.assertEqual(response.status_code, 200)
+
+    #ensure reviews can be added for business
+    def test_add_review(self):
+        self.tester.post('/api/auth/register',content_type='application/json',
+                                   data =json.dumps( dict(
+                                                        email='jh@gmail.com',
+                                                        password='amazon')))
+        user_login = self.tester.post('/api/auth/login',content_type='application/json',
+                         data=json.dumps(dict(email='jh@gmail.com',password='amazon')))
+
+        result = json.loads(user_login.data.decode())
+        self.tester.post('/api/businesses',content_type='application/json',
+                         data = json.dumps( dict(name='Restaurant',
+                                                 description='We cook',
+                                                 location = 'Kampala',
+                                                 category = "Food")),
+                         headers = dict(access_token=result['token']))
+        
+        response = self.tester.post('/api/businesses/8/reviews',
+                                    content_type = 'application/json',
+                                    data = json.dumps(dict(review = "It's awesome")),
+                                    headers = dict(access_token = result['token']))
+        data = json.loads(response.data.decode())
+        self.assertIn(u'Successfully added review', response.data)
+        self.assertEqual(response.status_code, 200)
 """
     #ensure business can be edited by logged in user
     def test_edit_business(self):
         self.tester.post('/api/auth/register',content_type='application/json',
                                    data =json.dumps( dict(
                                                         email='jh@gmail.com',
-                                                        password='amazon')))#pragma:no cover
+                                                        password='amazon')))
         user_login = self.tester.post('/api/auth/login',content_type='application/json',
                          data=json.dumps(dict(email='jh@gmail.com',password='amazon')))
 
         result = json.loads(user_login.data.decode())
-        self.tester.post('/api/business',content_type='application/json',
-                                   data =json.dumps( dict(name='Carpenter',
-                                                        description='We make wood')),
-                         headers =dict(access_token = result))
-        self.tester.post('/api/business',content_type='application/json',
-                                   data =json.dumps( dict(name='Biking',
-                                                        description='Ride ya')),
-                         headers =dict(access_token=result))
-        response = self.tester.put('/api/business/<name>', content_type='application/json',
-                                   data=json.dumps(dict(name='Biking',
-                                                        new_name='Biking and safari',
-                                                        new_description = 'riding all day')),
-                                   headers=dict(access_token=result))#pragma:no cover
-        #data = json.loads(response.data.decode())#pragma:no cover
+        self.tester.post('/api/businesses',content_type='application/json',
+                                   data = json.dumps( dict(name='Restaurant',
+                                                        description='We cook',
+                                                          location = 'Kampala',
+                                                          category = "Food")),
+                         headers = dict(access_token=result['token']))
+        
+        self.tester.post('/api/businesses',content_type='application/json',
+                                   data = json.dumps( dict(name='School',
+                                                        description='We teach',
+                                                          location = 'Kampala',
+                                                          category = "Educate")),
+                         headers = dict(access_token=result['token']))
+
+        response = self.tester.put('/api/businesses/School', content_type='application/json',
+                                   headers=dict(access_token=result['token']))#pragma:no cover
+        
+        data = json.loads(response.data.decode())#pragma:no cover
         self.assertEqual(response.status_code, 200)#pragma:no cover
         self.assertIn(u'Successfully edited', response.data)#pragma:no cover
 
