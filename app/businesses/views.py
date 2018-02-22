@@ -81,7 +81,15 @@ def edit_business(current_user, name):
                 business['details'].category = data['new_category']
                 
     return jsonify({"message": "Successfully edited"})
-            
+
+@businesses.route('/api/businesses/<name>', methods = ['DELETE'])
+@token_required
+def delete_business(current_user, name):
+    for business in businesses_db:
+        if business["details"].name == name:
+            businesses_db.remove(business)
+            message = "Successfully deleted"
+    return jsonify({"message":message})
 
 @businesses.route('/api/businesses/<name>/reviews', methods = ['POST'])
 @token_required
@@ -104,11 +112,3 @@ def view_reviews(current_user, name):
             all_reviews = business['reviews']
 
     return jsonify({'reviews':all_reviews})
-
-"""
-@businesses.route('/api/businesses/<businessId>', methods = ['GET'])
-@token_required
-def get_reviews(current_user, businessId):
-    reviews = ""
-    return jsonify({"reviews":reviews})
-"""
