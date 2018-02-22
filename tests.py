@@ -11,6 +11,7 @@ class BaseTestCase(unittest.TestCase):
 
     def tearDown(self):
         users.database = []
+        users.Business = []
 
 class TestUserApi(BaseTestCase):
     ################
@@ -205,7 +206,7 @@ class TestUserApi(BaseTestCase):
                                    headers=dict(access_token=result['token']))
         
         data = json.loads(response.data.decode())
-        self.assertIn(u'Id does not exist', response.data)
+        self.assertIn(u'Business does not exist', response.data)
         self.assertEqual(response.status_code, 200)
 
 
@@ -244,6 +245,40 @@ class TestUserApi(BaseTestCase):
         self.assertEqual(response.status_code, 200)#pragma:no cover
         self.assertIn(u'Successfully edited', response.data)#pragma:no cover
 
+    ##ensure  business can be deleted by user who registered it
+    def test_fail_edit_business(self):
+        self.tester.post('/api/auth/register',content_type='application/json',
+                                   data =json.dumps( dict(
+                                                        email='jh@gmail.com',
+                                                        password='amazon')))
+        user_login = self.tester.post('/api/auth/login',content_type='application/json',
+                         data=json.dumps(dict(email='jh@gmail.com',password='amazon')))
+        result = json.loads(user_login.data.decode())
+        self.tester.post('/api/businesses',content_type='application/json',
+                                   data = json.dumps( dict(name='Restaurant',
+                                                        description='We cook',
+                                                          location = 'Kampala',
+                                                          category = "Food")),
+                         headers = dict(access_token=result['token']))
+        
+        self.tester.post('/api/businesses',content_type='application/json',
+                                   data = json.dumps( dict(name='School',
+                                                        description='We teach',
+                                                          location = 'Kampala',
+                                                          category = "Educate")),
+                         headers = dict(access_token=result['token']))
+
+        response = self.tester.put('/api/businesses/Minimart', content_type='application/json',
+                                   data = json.dumps( dict(new_name='School is us',
+                                                        new_description='We teach',
+                                                          new_location = 'Entebbe',
+                                                          new_category = "Educate")),
+                                   headers=dict(access_token=result['token']))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(u'"Business does not exist', response.data)
+
+
+
     #ensure business can be deleted by logged in user
     def test_delete_business(self):
         self.tester.post('/api/auth/register',content_type='application/json',
@@ -274,6 +309,47 @@ class TestUserApi(BaseTestCase):
         #data = json.loads(response.data.decode())#pragma:no cover
         self.assertEqual(response.status_code, 200)#pragma:no cover
         self.assertIn(u'Successfully deleted', response.data)#pragma:no cover
+
+    #ensure  business can be deleted by user who registered it
+    def test_delete_business_by_user_id(self):
+        self.tester.post('/api/auth/register',content_type='application/json',
+                                   data =json.dumps( dict(
+                                                        email='jh@gmail.com',
+                                                        password='amazon')))
+        self.tester.post('/api/auth/register',content_type='application/json',
+                                   data =json.dumps( dict(
+                                                        email='me@gmail.com',
+                                                        password='amazon')))
+        user_login = self.tester.post('/api/auth/login',
+                                      content_type='application/json',
+                                      data=json.dumps(dict(email='jh@gmail.com',password='amazon')))
+        result = json.loads(user_login.data.decode())
+        self.tester.post('/api/businesses',content_type='application/json',
+                                   data = json.dumps( dict(name='Restaurant',
+                                                        description='We cook',
+                                                          location = 'Kampala',
+                                                          category = "Food")),
+                         headers = dict(access_token=result['token']))
+        self.tester.post('/api/auth/logout',
+                         content_type = 'application/json',
+                         headers = dict(access_token = result['token']))
+        login = self.tester.post('/api/auth/login',
+                                 content_type='application/json',
+                                 data=json.dumps(dict(email='me@gmail.com',password='amazon')))
+        
+        self.tester.post('/api/businesses',content_type='application/json',
+                                   data = json.dumps( dict(name='School',
+                                                        description='We teach',
+                                                          location = 'Kampala',
+                                                          category = "Educate")),
+                         headers = dict(access_token=result['token']))
+
+        response = self.tester.delete('/api/businesses/Restaurant', content_type='application/json',
+                                      headers=dict(access_token=result['token']))
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(u'Successfully deleted', response.data)
+
 
         #####TEST REVIEWS#####
 
@@ -337,66 +413,6 @@ class TestUserApi(BaseTestCase):
 
         self.assertIn(u'Amazing place', response.data)
         self.assertEqual(response.status_code, 200)
-
-    #ensure business can be edited by logged in user
-    def test_fail_edit_business(self):
-        self.tester.post('/api/auth/register',content_type='application/json',
-                                   data =json.dumps( dict(
-                                                        email='jh@gmail.com',
-                                                        password='amazon')))
-        user_login = self.tester.post('/api/auth/login',content_type='application/json',
-                         data=json.dumps(dict(email='jh@gmail.com',password='amazon')))
-        result = json.loads(user_login.data.decode())
-        self.tester.post('/api/business',content_type='application/json',
-                                   data =json.dumps( dict(name='Church',
-                                                        description='We pray')),
-                         headers =dict(access_token = result))
-        self.tester.post('/api/business', content_type='application/json',
-                                   data =json.dumps( dict(name='Jumpers',
-                                                        description='We rob')),
-                         headers =dict(access_token=result))
-
-        response = self.tester.put('/api/business/<name>', content_type='application/json',
-                                   data=json.dumps(dict(name='Church',
-                                                        new_name='We pray',
-                                                        new_description='We raise too')),
-                                   headers=dict(access_token=result))
-        #data = json.loads(response.data.decode())
-        self.assertEqual(response.status_code, 401)
-        self.assertIn(u'"Business cannot be edited', response.data)
-
-    #ensure  business can be deleted by user who registered it
-    def test_delete_business(self):
-        self.tester.post('/api/auth/register',content_type='application/json',
-                                   data =json.dumps( dict(
-                                                        email='jh@gmail.com',
-                                                        password='amazon')))
-        self.tester.post('/api/auth/register',content_type='application/json',
-                                   data =json.dumps( dict(
-                                                        email='me@gmail.com',
-                                                        password='amazon')))
-        user_login = self.tester.post('/api/auth/login',
-                                      content_type='application/json',
-                                      data=json.dumps(dict(email='jh@gmail.com',password='amazon')))
-        result = json.loads(user_login.data.decode())
-        self.tester.post('/api/businesses',content_type='application/json',
-                                   data = json.dumps( dict(name='Restaurant',
-                                                        description='We cook',
-                                                          location = 'Kampala',
-                                                          category = "Food")),
-                         headers = dict(access_token=result['token']))
-        
-        self.tester.post('/api/businesses',content_type='application/json',
-                                   data = json.dumps( dict(name='School',
-                                                        description='We teach',
-                                                          location = 'Kampala',
-                                                          category = "Educate")),
-                         headers = dict(access_token=result['token']))
-        response = self.tester.delete('/api/businesses/School', content_type='application/json',
-                                      headers=dict(access_token=result['token']))
-        
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(u'Successfully deleted', response.data)
 
 
 if __name__ == "__main__":
