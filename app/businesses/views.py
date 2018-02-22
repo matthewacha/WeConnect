@@ -93,9 +93,12 @@ def edit_business(current_user, name):
 @token_required
 def delete_business(current_user, name):
     for business in businesses_db:
-        if business['details'].user_id == current_user['user_id'] and business["details"].name == name:
-            businesses_db.remove(business)
-            message = "Successfully deleted"
+        if business['details'].user_id == current_user['user_id']:
+            if business["details"].name == name:
+                businesses_db.remove(business)
+                message = "Successfully deleted"
+            else:
+                message = "Business does not exist"
         else:
             message = "You are not authorized"
     return jsonify({"message":message})
