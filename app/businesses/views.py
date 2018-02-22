@@ -75,11 +75,20 @@ def post_review(current_user, name):
     data = request.get_json()
     review = data['review']
     for business in businesses_db:
-        for key,value in business.iteritems():
-            if business["details"].name == name:
-                business['reviews'].append(review)
-                message = "Successfully added review"
+        if business["details"].name == name:
+            business['reviews'].append(review)
+            message = "Successfully added review"
     return jsonify({"message":message})
+
+@businesses.route('/api/businesses/<name>/reviews', methods = ['GET'])
+@token_required
+def view_reviews(current_user, name):
+    all_reviews = []
+    for business in businesses_db:
+        if business['details'].name == name:
+            all_reviews = business['reviews']
+
+    return jsonify({'reviews':all_reviews})
 
 """
 @businesses.route('/api/businesses/<businessId>', methods = ['GET'])
