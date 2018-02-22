@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/matthewacha/WeConnect.svg?branch=ft-backend)](https://travis-ci.org/matthewacha/WeConnect)
-[![Coverage Status](https://coveralls.io/repos/github/matthewacha/WeConnect/badge.svg?branch=master)](https://coveralls.io/github/matthewacha/WeConnect?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/matthewacha/WeConnect/badge.svg?branch=master)](https://coveralls.io/github/matthewacha/WeConnect?branch=ft-backend)
 
 # WeConnect
 WeConnect provides a platform that brings businesses and individuals 
