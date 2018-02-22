@@ -23,28 +23,9 @@ def register(current_user):
     return jsonify({'message':"Successfully added business"})
 
 
-@businesses.route('/api/businesses', methods = ['GET'])
-@token_required
-def retrieve_businesses(current_user):
-    output = []
-    for business in businesses_db:
-        business_={
-        "name":business['details'].name,
-        "description":business['details'].description,
-        "location":business['details'].location,
-        "category":business['details'].category,
-        "user_id":business['details'].user_id,
-        "businessId":business['biz_id'],
-        "reviews":business['reviews']}
-        output.append(business_)
-        
-
-    return jsonify({"businesses":output})
-
 
 @businesses.route('/api/businesses/<businessId>', methods = ['GET'])
-@token_required
-def retrieve_business(current_user, businessId):
+def retrieve_business(businessId):
     output = []
     for business in businesses_db:
         business_={
@@ -68,6 +49,39 @@ def retrieve_business(current_user, businessId):
 
     return jsonify({"business":business_out[0]})
 
+@businesses.route('/api/businesses', methods = ['GET'])
+def retrieve_businesses():
+    output = []
+    for business in businesses_db:
+        business_={
+        "name":business['details'].name,
+        "description":business['details'].description,
+        "location":business['details'].location,
+        "category":business['details'].category,
+        "user_id":business['details'].user_id,
+        "businessId":business['biz_id'],
+        "reviews":business['reviews']}
+        output.append(business_)
+        
+
+    return jsonify({"businesses":output})
+
+@businesses.route('/api/businesses/<name>', methods = ['PUT'])
+@token_required
+def edit_business(current_user, name):
+    data = request.get_json()
+    
+    for business in businesses_db:
+        if business['details'].name == name:
+            if data['new_name']:
+                business['details'].name = data['new_name']
+            if data['new_description']:
+                business['details'].description = data['new_description']
+            if data['new_location']:
+                business['details'].category = data['new_category']
+                
+    return jsonify({"message": "Successfully edited"})
+            
 
 @businesses.route('/api/businesses/<name>/reviews', methods = ['POST'])
 @token_required
@@ -79,6 +93,7 @@ def post_review(current_user, name):
             business['reviews'].append(review)
             message = "Successfully added review"
     return jsonify({"message":message})
+
 
 @businesses.route('/api/businesses/<name>/reviews', methods = ['GET'])
 @token_required
