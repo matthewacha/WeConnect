@@ -10,7 +10,7 @@ from json import dumps
 
 secret_key = "its_so_secret_1945"
 businesses_db = []
-@businessesv1.route('/api/v1/businesses', methods = ['POST'])
+@businessesv1.route('/businesses', methods = ['POST'])
 @token_required
 def register(current_user):
     data = request.get_json()
@@ -24,7 +24,7 @@ def register(current_user):
 
 
 
-@businessesv1.route('/api/v1/businesses/<name>', methods = ['GET'])
+@businessesv1.route('/businesses/<name>', methods = ['GET'])
 def retrieve_business(name):
     output = []
     for business in businesses_db:
@@ -50,7 +50,7 @@ def retrieve_business(name):
         message = business_out
     return jsonify({"business":message[0]})
 
-@businessesv1.route('/api/v1/businesses', methods = ['GET'])
+@businessesv1.route('/businesses', methods = ['GET'])
 def retrieve_businesses():
     output = []
     for business in businesses_db:
@@ -67,7 +67,7 @@ def retrieve_businesses():
 
     return jsonify({"businesses":output})
 
-@businessesv1.route('/api/v1/businesses/<name>', methods = ['PUT'])
+@businessesv1.route('/businesses/<name>', methods = ['PUT'])
 @token_required
 def edit_business(current_user, name):
     data = request.get_json()
@@ -89,7 +89,7 @@ def edit_business(current_user, name):
                 
     return jsonify({"message":message })
 
-@businessesv1.route('/api/v1/businesses/<name>', methods = ['DELETE'])
+@businessesv1.route('/businesses/<name>', methods = ['DELETE'])
 @token_required
 def delete_business(current_user, name):
     for business in businesses_db:
@@ -103,7 +103,7 @@ def delete_business(current_user, name):
             message = "You are not authorized"
     return jsonify({"message":message})
 
-@businessesv1.route('/api/v1/businesses/<name>/reviews', methods = ['POST'])
+@businessesv1.route('/businesses/<name>/reviews', methods = ['POST'])
 @token_required
 def post_review(current_user, name):
     data = request.get_json()
@@ -115,7 +115,7 @@ def post_review(current_user, name):
     return jsonify({"message":message})
 
 
-@businessesv1.route('/api/v1/businesses/<name>/reviews', methods = ['GET'])
+@businessesv1.route('/businesses/<name>/reviews', methods = ['GET'])
 @token_required
 def view_reviews(current_user, name):
     all_reviews = []
