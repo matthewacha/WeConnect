@@ -5,7 +5,7 @@ import datetime
 from flask import Flask, jsonify, request, session, make_response, abort
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
-from . import users
+from . import usersv1
 from json import dumps
 
 secret_key = "its_so_secret_1945"
@@ -67,7 +67,7 @@ def token_required(funct):
             return funct(current_user, *args, **kwargs)
     return decorated_funct
     
-@users.route('/api/auth/register', methods = ['POST'])
+@usersv1.route('/api/v1/auth/register', methods = ['POST'])
 def add_user():
     json_data = request.get_json()
 
@@ -81,7 +81,7 @@ def add_user():
     return jsonify({"message":"Successfully signed up"})
     
 
-@users.route('/api/auth/login', methods = ['POST'])
+@usersv1.route('/api/v1/auth/login', methods = ['POST'])
 def login():
         auth = request.get_json()
         if not auth or not auth['email'] or not auth['password']:
@@ -106,7 +106,7 @@ def login():
                 return jsonify({'token':token})
         return make_response(("Authorize with correct password"), 401)
 
-@users.route('/api/auth/reset-password', methods = ['POST'])
+@usersv1.route('/api/v1/auth/reset-password', methods = ['POST'])
 @token_required
 def reset_password(current_user):
         cred = request.get_json()
@@ -117,7 +117,7 @@ def reset_password(current_user):
                 return make_response(("Successfully changed password"), 200)
 
 
-@users.route('/api/auth/logout', methods = ['POST'])
+@usersv1.route('/api/v1/auth/logout', methods = ['POST'])
 @token_required
 def logout(current_user):
         if 'access_token' in request.headers:

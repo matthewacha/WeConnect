@@ -1,5 +1,5 @@
 from flask import Blueprint
 
-users = Blueprint('users' , __name__)
+businessesv1 = Blueprint('business' , __name__)
 
 from . import views

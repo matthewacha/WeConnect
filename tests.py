@@ -1,8 +1,9 @@
 import os
 import unittest
 import json
-from app import app, users
-from app.users import views as users
+from app import app
+from app.v1 import users
+from app.v1.users import views as users
     
 
 class BaseTestCase(unittest.TestCase):
@@ -32,7 +33,7 @@ class TestUserApi(BaseTestCase):
     ##TEST SIGN UP##
     ################
     def test_sign_up_user(self):
-        response = self.tester.post('/api/auth/register',content_type = 'application/json',
+        response = self.tester.post('/api/v1/auth/register',content_type = 'application/json',
                                    data = json.dumps( dict(email='me@gmail.com',
                                                         password='greater')))
         self.assertIn(u'Successfully signed up', response.data)
@@ -46,10 +47,10 @@ class TestUserApi(BaseTestCase):
         ##############
 
     def test_incorrect_credential_login_failure(self):
-        self.tester.post('/api/auth/register',content_type='application/json',
+        self.tester.post('/api/v1/auth/register',content_type='application/json',
                                    data =json.dumps( dict(email='you@gmail.com',
                                                         password='lantern')))
-        response = self.tester.post('/api/auth/login',
+        response = self.tester.post('/api/v1/auth/login',
                                     content_type='application/json',
                                    data=json.dumps(dict(email='us@gmail.com',
                                                       password='amazon')))
@@ -57,10 +58,10 @@ class TestUserApi(BaseTestCase):
         self.assertEqual(response.status_code, 401)
 
     def test_correct_credential_login(self):
-        self.tester.post('/api/auth/register',content_type='application/json',
+        self.tester.post('/api/v1/auth/register',content_type='application/json',
                                    data =json.dumps( dict(email='jh@gmail.com',
                                                         password='amazons')))
-        response = self.tester.post('/api/auth/login',
+        response = self.tester.post('/api/v1/auth/login',
                                     content_type='application/json',
                                    data=json.dumps(dict(email='jh@gmail.com',
                                                       password='amazons')))
@@ -69,16 +70,16 @@ class TestUserApi(BaseTestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_password_reset(self):
-        self.tester.post('/api/auth/register',content_type='application/json',
+        self.tester.post('/api/v1/auth/register',content_type='application/json',
                                    data =json.dumps( dict(email='you@gmail.com',
                                                         password='lantern')))
-        login = self.tester.post('/api/auth/login',
+        login = self.tester.post('/api/v1/auth/login',
                                     content_type='application/json',
                                    data=json.dumps(dict(email='you@gmail.com',
                                                       password='lantern')))
         result = json.loads(login.data.decode())
         
-        response = self.tester.post('/api/auth/reset-password',
+        response = self.tester.post('/api/v1/auth/reset-password',
                                     content_type = 'application/json',
                                     data = json.dumps(dict(email = 'you@gmail.com',
                                                            old_password = 'lantern',
@@ -92,16 +93,16 @@ class TestUserApi(BaseTestCase):
 
 
     def test_logout_user(self):
-        self.tester.post('/api/auth/register',content_type='application/json',
+        self.tester.post('/api/v1/auth/register',content_type='application/json',
                                    data =json.dumps( dict(email='jh@gmail.com',
                                                         password='amazons')))
-        login = self.tester.post('/api/auth/login',
+        login = self.tester.post('/api/v1/auth/login',
                                     content_type='application/json',
                                    data=json.dumps(dict(email='jh@gmail.com',
                                                       password='amazons')))
         result = json.loads(login.data.decode())
 
-        response = self.tester.post('/api/auth/logout',
+        response = self.tester.post('/api/v1/auth/logout',
                                     content_type = 'application/json',
                                     headers = dict(access_token = result['token']))
         
@@ -112,10 +113,10 @@ class TestUserApi(BaseTestCase):
 
     #ensure user_token generated on login
     def test_token_generate(self):
-        self.tester.post('/api/auth/register',content_type='application/json',
+        self.tester.post('/api/v1/auth/register',content_type='application/json',
                                    data =json.dumps( dict(email='jh@gmail.com',
                                                         password='amazons')))
-        login = self.tester.post('/api/auth/login',
+        login = self.tester.post('/api/v1/auth/login',
                                     content_type='application/json',
                                    data=json.dumps(dict(email='jh@gmail.com',
                                                       password='amazons')))
@@ -128,16 +129,16 @@ class TestUserApi(BaseTestCase):
         #################
 
     def test_register_business(self):
-        self.tester.post('/api/auth/register',content_type='application/json',
+        self.tester.post('/api/v1/auth/register',content_type='application/json',
                                    data =json.dumps( dict(email='jh@gmail.com',
                                                         password='amazons')))
-        login = self.tester.post('/api/auth/login',
+        login = self.tester.post('/api/v1/auth/login',
                                  content_type= 'application/json',
                                  data=json.dumps(dict(email='jh@gmail.com',
                                                       password='amazons')))
         
         result = json.loads(login.data.decode())
-        response = self.tester.post('/api/businesses',content_type='application/json',
+        response = self.tester.post('/api/v1/businesses',content_type='application/json',
                                    data = json.dumps( dict(name='Fish To Go',
                                                         description='We sell fishy stuff',
                                                           location = 'Kampala',
@@ -149,27 +150,27 @@ class TestUserApi(BaseTestCase):
 
     #ensure businesses can be viewed publicly
     def test_view_businesses(self):
-        self.tester.post('/api/auth/register',content_type='application/json',
+        self.tester.post('/api/v1/auth/register',content_type='application/json',
                                    data =json.dumps( dict(
                                                         email='jh@gmail.com',
                                                         password='amazon')))
-        user_login = self.tester.post('/api/auth/login',content_type='application/json',
+        user_login = self.tester.post('/api/v1/auth/login',content_type='application/json',
                          data=json.dumps(dict(email='jh@gmail.com',password='amazon')))
 
         result = json.loads(user_login.data.decode())
-        self.tester.post('/api/businesses',content_type='application/json',
+        self.tester.post('/api/v1/businesses',content_type='application/json',
                                    data =json.dumps( dict(name='Restaurant',
                                                         description='We cook',
                                                           location = 'Kampala',
                                                           category = "Food")),
                          headers =dict(access_token=result['token']))
-        self.tester.post('/api/businesses',content_type='application/json',
+        self.tester.post('/api/v1/businesses',content_type='application/json',
                                    data =json.dumps( dict(name='School',
                                                         description='We teach',
                                                           location = 'Kampala',
                                                           category = "Educate")),
                          headers=dict(access_token=result['token']))
-        response = self.tester.get('/api/businesses',
+        response = self.tester.get('/api/v1/businesses',
                                   content_type='application/json',
                                    headers=dict(access_token=result['token']))
         
@@ -180,28 +181,28 @@ class TestUserApi(BaseTestCase):
 
     #ensure business Id cannot be viewed
     def test_view_wrong_business(self):
-        self.tester.post('/api/auth/register',content_type='application/json',
+        self.tester.post('/api/v1/auth/register',content_type='application/json',
                                    data =json.dumps( dict(
                                                         email='jh@gmail.com',
                                                         password='amazon')))
-        user_login = self.tester.post('/api/auth/login',content_type='application/json',
+        user_login = self.tester.post('/api/v1/auth/login',content_type='application/json',
                          data=json.dumps(dict(email='jh@gmail.com',password='amazon')))
 
         result = json.loads(user_login.data.decode())
-        self.tester.post('/api/businesses',content_type='application/json',
+        self.tester.post('/api/v1/businesses',content_type='application/json',
                                    data =json.dumps( dict(name='Restaurant',
                                                         description='We cook',
                                                           location = 'Kampala',
                                                           category = "Food")),
                          headers =dict(access_token=result['token']))
-        self.tester.post('/api/businesses',content_type='application/json',
+        self.tester.post('/api/v1/businesses',content_type='application/json',
                                    data =json.dumps( dict(name='School',
                                                         description='We teach',
                                                           location = 'Kampala',
                                                           category = "Educate",
                                                           businessId = 123)),
                          headers=dict(access_token=result['token']))
-        response = self.tester.get('/api/businesses/123',
+        response = self.tester.get('/api/v1/businesses/123',
                                   content_type='application/json',
                                    headers=dict(access_token=result['token']))
         
@@ -213,29 +214,29 @@ class TestUserApi(BaseTestCase):
 
     #ensure business can be edited by logged in user
     def test_edit_business(self):
-        self.tester.post('/api/auth/register',content_type='application/json',
+        self.tester.post('/api/v1/auth/register',content_type='application/json',
                                    data =json.dumps( dict(
                                                         email='jh@gmail.com',
                                                         password='amazon')))
-        user_login = self.tester.post('/api/auth/login',content_type='application/json',
+        user_login = self.tester.post('/api/v1/auth/login',content_type='application/json',
                          data=json.dumps(dict(email='jh@gmail.com',password='amazon')))
 
         result = json.loads(user_login.data.decode())
-        self.tester.post('/api/businesses',content_type='application/json',
+        self.tester.post('/api/v1/businesses',content_type='application/json',
                                    data = json.dumps( dict(name='Restaurant',
                                                         description='We cook',
                                                           location = 'Kampala',
                                                           category = "Food")),
                          headers = dict(access_token=result['token']))
         
-        self.tester.post('/api/businesses',content_type='application/json',
+        self.tester.post('/api/v1/businesses',content_type='application/json',
                                    data = json.dumps( dict(name='School',
                                                         description='We teach',
                                                           location = 'Kampala',
                                                           category = "Educate")),
                          headers = dict(access_token=result['token']))
 
-        response = self.tester.put('/api/businesses/School', content_type='application/json',
+        response = self.tester.put('/api/v1/businesses/School', content_type='application/json',
                                    data = json.dumps( dict(new_name='School is us',
                                                         new_description='We teach',
                                                           new_location = 'Entebbe',
@@ -247,28 +248,28 @@ class TestUserApi(BaseTestCase):
 
     ##ensure  business can be deleted by user who registered it
     def test_fail_edit_business(self):
-        self.tester.post('/api/auth/register',content_type='application/json',
+        self.tester.post('/api/v1/auth/register',content_type='application/json',
                                    data =json.dumps( dict(
                                                         email='jh@gmail.com',
                                                         password='amazon')))
-        user_login = self.tester.post('/api/auth/login',content_type='application/json',
+        user_login = self.tester.post('/api/v1/auth/login',content_type='application/json',
                          data=json.dumps(dict(email='jh@gmail.com',password='amazon')))
         result = json.loads(user_login.data.decode())
-        self.tester.post('/api/businesses',content_type='application/json',
+        self.tester.post('/api/v1/businesses',content_type='application/json',
                                    data = json.dumps( dict(name='Restaurant',
                                                         description='We cook',
                                                           location = 'Kampala',
                                                           category = "Food")),
                          headers = dict(access_token=result['token']))
         
-        self.tester.post('/api/businesses',content_type='application/json',
+        self.tester.post('/api/v1/businesses',content_type='application/json',
                                    data = json.dumps( dict(name='School',
                                                         description='We teach',
                                                           location = 'Kampala',
                                                           category = "Educate")),
                          headers = dict(access_token=result['token']))
 
-        response = self.tester.put('/api/businesses/Minimart', content_type='application/json',
+        response = self.tester.put('/api/v1/businesses/Minimart', content_type='application/json',
                                    data = json.dumps( dict(new_name='School is us',
                                                         new_description='We teach',
                                                           new_location = 'Entebbe',
@@ -281,29 +282,29 @@ class TestUserApi(BaseTestCase):
 
     #ensure business can be deleted by logged in user
     def test_delete_business(self):
-        self.tester.post('/api/auth/register',content_type='application/json',
+        self.tester.post('/api/v1/auth/register',content_type='application/json',
                                    data =json.dumps( dict(
                                                         email='jh@gmail.com',
                                                         password='amazon')))
-        user_login = self.tester.post('/api/auth/login',content_type='application/json',
+        user_login = self.tester.post('/api/v1/auth/login',content_type='application/json',
                          data=json.dumps(dict(email='jh@gmail.com',password='amazon')))
 
         result = json.loads(user_login.data.decode())
-        self.tester.post('/api/businesses',content_type='application/json',
+        self.tester.post('/api/v1/businesses',content_type='application/json',
                                    data = json.dumps( dict(name='Restaurant',
                                                         description='We cook',
                                                           location = 'Kampala',
                                                           category = "Food")),
                          headers = dict(access_token=result['token']))
         
-        self.tester.post('/api/businesses',content_type='application/json',
+        self.tester.post('/api/v1/businesses',content_type='application/json',
                                    data = json.dumps( dict(name='School',
                                                         description='We teach',
                                                           location = 'Kampala',
                                                           category = "Educate")),
                          headers = dict(access_token=result['token']))
 
-        response = self.tester.delete('/api/businesses/School', content_type='application/json',
+        response = self.tester.delete('/api/v1/businesses/School', content_type='application/json',
                                    headers=dict(access_token=result['token']))#pragma:no cover
         
         #data = json.loads(response.data.decode())#pragma:no cover
@@ -312,39 +313,39 @@ class TestUserApi(BaseTestCase):
 
     #ensure  business can be deleted by user who registered it
     def test_delete_business_by_user_id(self):
-        self.tester.post('/api/auth/register',content_type='application/json',
+        self.tester.post('/api/v1/auth/register',content_type='application/json',
                                    data =json.dumps( dict(
                                                         email='jh@gmail.com',
                                                         password='amazon')))
-        self.tester.post('/api/auth/register',content_type='application/json',
+        self.tester.post('/api/v1/auth/register',content_type='application/json',
                                    data =json.dumps( dict(
                                                         email='me@gmail.com',
                                                         password='amazon')))
-        user_login = self.tester.post('/api/auth/login',
+        user_login = self.tester.post('/api/v1/auth/login',
                                       content_type='application/json',
                                       data=json.dumps(dict(email='jh@gmail.com',password='amazon')))
         result = json.loads(user_login.data.decode())
-        self.tester.post('/api/businesses',content_type='application/json',
+        self.tester.post('/api/v1/businesses',content_type='application/json',
                                    data = json.dumps( dict(name='Restaurant',
                                                         description='We cook',
                                                           location = 'Kampala',
                                                           category = "Food")),
                          headers = dict(access_token=result['token']))
-        self.tester.post('/api/auth/logout',
+        self.tester.post('/api/v1/auth/logout',
                          content_type = 'application/json',
                          headers = dict(access_token = result['token']))
-        login = self.tester.post('/api/auth/login',
+        login = self.tester.post('/api/v1/auth/login',
                                  content_type='application/json',
                                  data=json.dumps(dict(email='me@gmail.com',password='amazon')))
         
-        self.tester.post('/api/businesses',content_type='application/json',
+        self.tester.post('/api/v1/businesses',content_type='application/json',
                                    data = json.dumps( dict(name='School',
                                                         description='We teach',
                                                           location = 'Kampala',
                                                           category = "Educate")),
                          headers = dict(access_token=result['token']))
 
-        response = self.tester.delete('/api/businesses/Restaurant', content_type='application/json',
+        response = self.tester.delete('/api/v1/businesses/Restaurant', content_type='application/json',
                                       headers=dict(access_token=result['token']))
         
         self.assertEqual(response.status_code, 200)
@@ -355,22 +356,22 @@ class TestUserApi(BaseTestCase):
 
     #ensure reviews can be added for business
     def test_add_review(self):
-        self.tester.post('/api/auth/register',content_type='application/json',
+        self.tester.post('/api/v1/auth/register',content_type='application/json',
                                    data =json.dumps( dict(
                                                         email='jh@gmail.com',
                                                         password='amazon')))
-        user_login = self.tester.post('/api/auth/login',content_type='application/json',
+        user_login = self.tester.post('/api/v1/auth/login',content_type='application/json',
                          data=json.dumps(dict(email='jh@gmail.com',password='amazon')))
 
         result = json.loads(user_login.data.decode())
-        self.tester.post('/api/businesses',content_type='application/json',
+        self.tester.post('/api/v1/businesses',content_type='application/json',
                          data = json.dumps( dict(name='Restaurant',
                                                  description='We cook',
                                                  location = 'Kampala',
                                                  category = "Food")),
                          headers = dict(access_token=result['token']))
         
-        response = self.tester.post('/api/businesses/Restaurant/reviews',
+        response = self.tester.post('/api/v1/businesses/Restaurant/reviews',
                                     content_type = 'application/json',
                                     data = json.dumps(dict(review = "It's awesome")),
                                     headers = dict(access_token = result['token']))
@@ -380,34 +381,34 @@ class TestUserApi(BaseTestCase):
 
     #ensure reviews can be viewed for business
     def test_view_reviews(self):
-        self.tester.post('/api/auth/register',content_type='application/json',
+        self.tester.post('/api/v1/auth/register',content_type='application/json',
                                    data =json.dumps( dict(
                                                         email='jh@gmail.com',
                                                         password='amazon')))
-        user_login = self.tester.post('/api/auth/login',content_type='application/json',
+        user_login = self.tester.post('/api/v1/auth/login',content_type='application/json',
                          data=json.dumps(dict(email='jh@gmail.com',password='amazon')))
 
         result = json.loads(user_login.data.decode())
-        self.tester.post('/api/businesses',content_type='application/json',
+        self.tester.post('/api/v1/businesses',content_type='application/json',
                          data = json.dumps( dict(name='Restaurant',
                                                  description='We cook',
                                                  location = 'Kampala',
                                                  category = "Food")),
                          headers = dict(access_token=result['token']))
-        self.tester.post('/api/businesses/Restaurant/reviews',
+        self.tester.post('/api/v1/businesses/Restaurant/reviews',
                                     content_type = 'application/json',
                                     data = json.dumps(dict(review = "It's awesome")),
                                     headers = dict(access_token = result['token']))
-        self.tester.post('/api/businesses/Restaurant/reviews',
+        self.tester.post('/api/v1/businesses/Restaurant/reviews',
                                     content_type = 'application/json',
                                     data = json.dumps(dict(review = "Amazing place")),
                                     headers = dict(access_token = result['token']))
-        self.tester.post('/api/businesses/Restaurant/reviews',
+        self.tester.post('/api/v1/businesses/Restaurant/reviews',
                                     content_type = 'application/json',
                                     data = json.dumps(dict(review = "Chef Rico is the best!")),
                                     headers = dict(access_token = result['token']))
         
-        response = self.tester.get('/api/businesses/Restaurant/reviews',
+        response = self.tester.get('/api/v1/businesses/Restaurant/reviews',
                                     content_type = 'application/json',
                                     headers = dict(access_token = result['token']))
 

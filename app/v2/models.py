@@ -1,0 +1,44 @@
+from sqlalchemy import Column, ForeignKey, Integer, String#pragma:no cover
+from sqlalchemy import create_engine#pragma:no cover
+from sqlalchemy.orm import relationship#pragma:no cover
+from app import db#pragma:no cover
+
+
+class User(db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(60), unique=True)
+    password = db.Column(db.String(300))
+    business_id = db.Column(db.Integer, db.ForeignKey('businesses.id'))
+    def __init__(self, email, password):
+        self.email = email#pragma:no cover
+        self.password = password#pragma:no cover
+        db.create_all()   #pragma:no cover
+    
+class Business(db.Model):
+    __tablename__ = 'businesses'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(60), nullable=False, unique=True)
+    description = db.Column(db.String(1000), nullable=False)
+    location = db.Column(db.String(200))
+    category = db.Column(db.String(200))
+    reviews_id = db.Column(db.Integer, db.ForeignKey('reviews.id'))
+    user = db.relationship('User', backref='businesses',
+                                 lazy='dynamic')
+    def __init__(self, name, description):
+        self.name = name#pragma:no cover
+        self.description = description#pragma:no cover
+        self.location = location
+        self.category = category
+        db.create_all()#pragma:no cover
+
+class Review(db.Model):
+    __tablename__ = 'reviews'
+    id = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.String(1000), nullable=False)
+    business = db.relationship('Business', backref='reviews',
+                                 lazy='dynamic')
+    def __init__(self, name, description):
+        self.name = name#pragma:no cover
+        self.description = description#pragma:no cover
+        db.create_all()#pragma:no cover
