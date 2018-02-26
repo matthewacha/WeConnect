@@ -28,30 +28,30 @@ Setup and Installation
 
 clone the repo
 
-$git clone https://github.com/matthewacha/WeConnect.git
+`$git clone https://github.com/matthewacha/WeConnect.git`
 
-For windows, run the setup.bat file to demo on your local server
+For windows, run the 
+`setup.bat`
 
-For Linux, cygwin, OS X run setup.sh file to demo 
+For Linux, cygwin, OS X run 
+`setup.sh` 
 
-DEMO
+Use the following endpoints to demo
 
-1.To start, signup with your email and password
+|EndPoint|Functionality|
+|---------|------------|
+|[POST/api/auth/register](#)|Creates a user account|
+|[POST/api/auth/login](#)|Logs in a user|
+|[POST/api/auth/logout](#)|Logs out a user|
+|[POST/api/auth/reset-password](#)|Password reset|
+|[POST/api/businesses](#)|Register a business|
+|[PUT/api/businesses/<name>](#)|Updates a business profile|
+|[DELETE/api/businesses/<name>](#)|Remove a business|
+|[GET/api/businesses](#)|Retrieves all businesses|
+|[GET/api/businesses/<name>](#)|Get a business|
+|[POST/api/businesses/<name>/reviews](#)|Add a review for a business|
+|[GET/api/businesses/<name>/reviews](#)|Get all reviews for a business|
 
-2.Login into your new account
-
-3.got to Businesses and add a new business by filling in the details
-in the forms
-
-4.view businesses that have been add by other users, and make reviews
-
-5.View reviews other people make to your businesses
-
-6.Edit profiles of your businesses
-
-7.Delete businesses you no longer need
-
-8. Logout whenever you are done
 
 Thank you for using WeConnect
 
