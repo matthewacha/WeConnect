@@ -1,7 +1,14 @@
 click==6.7
 Flask==0.12.2
+Flask-Script==2.0.6
+Flask-SQLAlchemy==2.3.2
+gunicorn==19.7.1
 itsdangerous==0.24
 Jinja2==2.10
+manage.py==0.2.10
 MarkupSafe==1.0
+psycopg2==2.7.4
 PyJWT==1.5.3
+SQLAlchemy==1.2.4
+virtualenv==15.1.0
 Werkzeug==0.14.1
