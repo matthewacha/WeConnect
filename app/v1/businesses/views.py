@@ -2,15 +2,18 @@ import os
 import random
 import jwt
 from flask import Flask, jsonify, request, session, make_response, abort
+from flasgger import swag_from
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.v1.users.views import database, Business, generate_id, token_required
 from functools import wraps
-from . import businessesv1
+from . import businesses
 from json import dumps
 
 secret_key = "its_so_secret_1945"
 businesses_db = []
-@businessesv1.route('/businesses', methods = ['POST'])
+
+@businesses.route('/api/businesses', methods = ['POST'])
+@swag_from('v1/api-docs/register_business.yml')
 @token_required
 def register(current_user):
     data = request.get_json()
@@ -24,7 +27,8 @@ def register(current_user):
 
 
 
-@businessesv1.route('/businesses/<name>', methods = ['GET'])
+@businesses.route('/api/businesses/<name>', methods = ['GET'])
+@swag_from('v1/api-docs/view_businesses.yml')
 def retrieve_business(name):
     output = []
     for business in businesses_db:
@@ -50,7 +54,8 @@ def retrieve_business(name):
         message = business_out
     return jsonify({"business":message[0]})
 
-@businessesv1.route('/businesses', methods = ['GET'])
+@businesses.route('/api/businesses', methods = ['GET'])
+@swag_from('v1/api-docs/view_a_business.yml')
 def retrieve_businesses():
     output = []
     for business in businesses_db:
@@ -67,7 +72,8 @@ def retrieve_businesses():
 
     return jsonify({"businesses":output})
 
-@businessesv1.route('/businesses/<name>', methods = ['PUT'])
+@businesses.route('/api/businesses/<name>', methods = ['PUT'])
+@swag_from('v1/api-docs/update_business.yml')
 @token_required
 def edit_business(current_user, name):
     data = request.get_json()
@@ -89,7 +95,8 @@ def edit_business(current_user, name):
                 
     return jsonify({"message":message })
 
-@businessesv1.route('/businesses/<name>', methods = ['DELETE'])
+@businesses.route('/api/businesses/<name>', methods = ['DELETE'])
+@swag_from('v1/api-docs/delete_business.yml')
 @token_required
 def delete_business(current_user, name):
     for business in businesses_db:
@@ -103,7 +110,8 @@ def delete_business(current_user, name):
             message = "You are not authorized"
     return jsonify({"message":message})
 
-@businessesv1.route('/businesses/<name>/reviews', methods = ['POST'])
+@businesses.route('/api/businesses/<name>/reviews', methods = ['POST'])
+@swag_from('v1/api-docs/post_review.yml')
 @token_required
 def post_review(current_user, name):
     data = request.get_json()
@@ -115,7 +123,8 @@ def post_review(current_user, name):
     return jsonify({"message":message})
 
 
-@businessesv1.route('/businesses/<name>/reviews', methods = ['GET'])
+@businesses.route('/api/businesses/<name>/reviews', methods = ['GET'])
+@swag_from('v1/api-docs/logout.yml')
 @token_required
 def view_reviews(current_user, name):
     all_reviews = []

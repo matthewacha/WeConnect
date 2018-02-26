@@ -1,8 +1,11 @@
 from flask import Flask
+from flasgger import Swagger
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config.from_object('config')
+
+swagger=Swagger(app)
 
 db = SQLAlchemy(app)
 db.init_app(app)

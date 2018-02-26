@@ -3,6 +3,7 @@ import random
 import jwt
 import datetime
 from flask import Flask, jsonify, request, session, make_response, abort
+from flasgger import swag_from
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from . import usersv1
@@ -68,6 +69,7 @@ def token_required(funct):
     return decorated_funct
     
 @usersv1.route('/auth/register', methods = ['POST'])
+@swag_from('v1/api-docs/register_user.yml')
 def add_user():
     json_data = request.get_json()
 
@@ -82,6 +84,7 @@ def add_user():
     
 
 @usersv1.route('/auth/login', methods = ['POST'])
+@swag_from('v1/api-docs/login_user.yml')
 def login():
         auth = request.get_json()
         if not auth or not auth['email'] or not auth['password']:
@@ -107,6 +110,7 @@ def login():
         return make_response(("Authorize with correct password"), 401)
 
 @usersv1.route('/auth/reset-password', methods = ['POST'])
+@swag_from('v1/api-docs/reset_password.yml')
 @token_required
 def reset_password(current_user):
         cred = request.get_json()
@@ -118,6 +122,7 @@ def reset_password(current_user):
 
 
 @usersv1.route('/auth/logout', methods = ['POST'])
+@swag_from('v1/api-docs/logout_user.yml')
 @token_required
 def logout(current_user):
         if 'access_token' in request.headers:
