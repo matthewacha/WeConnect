@@ -4,7 +4,7 @@ from flask_script import Manager
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config.from_object('config')
+app.config.from_object('config.Deployment')
 
 db = SQLAlchemy(app)
 db.init_app(app)
