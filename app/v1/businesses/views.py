@@ -2,7 +2,7 @@ import os
 import random
 import jwt
 from flask import Flask, jsonify, request, session, make_response, abort
-from flasgger import swag_from
+from flasgger.utils import swag_from
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.v1.modals import database, Business, generate_id
 from app.v1.users.views import token_required
@@ -14,7 +14,7 @@ secret_key = "its_so_secret_1945"
 businesses_db = []
 
 @businessesv1.route('/businesses', methods = ['POST'])
-@swag_from('./api-docs/v1/register_business.yml')
+@swag_from('../api-docs/v1/register_business.yml')
 @token_required
 def register(current_user):
     data = request.get_json()
@@ -29,7 +29,7 @@ def register(current_user):
 
 
 @businessesv1.route('/businesses/<name>', methods = ['GET'])
-@swag_from('./api-docs/v1/view_business.yml')
+@swag_from('../api-docs/v1/view_business.yml')
 def retrieve_business(name):
     output = []
     for business in businesses_db:
@@ -56,7 +56,7 @@ def retrieve_business(name):
     return jsonify({"business":message[0]})
 
 @businessesv1.route('/businesses', methods = ['GET'])
-@swag_from('./api-docs/v1/view_businesses.yml')
+@swag_from('../api-docs/v1/view_businesses.yml')
 def retrieve_businesses():
     output = []
     for business in businesses_db:
@@ -78,7 +78,7 @@ def retrieve_businesses():
     return jsonify({"businesses":message})
 
 @businessesv1.route('/businesses/<name>', methods = ['PUT'])
-@swag_from('./api-docs/v1/update_business.yml')
+@swag_from('../api-docs/v1/update_business.yml')
 @token_required
 def edit_business(current_user, name):
     data = request.get_json()
@@ -101,7 +101,7 @@ def edit_business(current_user, name):
     return jsonify({"message":message })
 
 @businessesv1.route('/businesses/<name>', methods = ['DELETE'])
-@swag_from('./api-docs/v1/delete_business.yml')
+@swag_from('../api-docs/v1/delete_business.yml')
 @token_required
 def delete_business(current_user, name):
     for business in businesses_db:
@@ -116,7 +116,7 @@ def delete_business(current_user, name):
     return jsonify({"message":message})
 
 @businessesv1.route('/businesses/<name>/reviews', methods = ['POST'])
-@swag_from('./api-docs/v1/post_review.yml')
+@swag_from('../api-docs/v1/post_review.yml')
 @token_required
 def post_review(current_user, name):
     data = request.get_json()
