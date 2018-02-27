@@ -53,3 +53,7 @@ def reset_password():
         user.password = data['new_password']
         return make_response(("Successfully changed password"), 200)
     return make_response(("Input correct old password"), 401)
+
+@users.route('/auth/logout', methods = ['POST'])
+def logout():
+    return make_response(("Successfully logged out"), 200)
