@@ -5,7 +5,7 @@ from flask import Flask, jsonify, request, session, make_response, abort
 from flasgger.utils import swag_from
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
-from app.v1.modals import database, generate_id, User
+from app.v1.models import database, generate_id, User
 from . import usersv1
 from json import dumps
 
