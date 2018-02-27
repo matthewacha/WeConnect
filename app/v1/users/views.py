@@ -77,10 +77,13 @@ def add_user():
     user_profile = {'details':user,
                     'user_id':generate_id(),
                     'businesses':[]}
-    database.append(user_profile)
-    message = 'Successfully signed up'
-
-    return jsonify({"message":"Successfully signed up"})
+    user = [user for user in database if user['details'].email == json_data['email']]
+    if len(user) > 0:
+        database.append(user_profile)
+        message = 'Successfully signed up'
+    else:
+        message = 'User already exists'
+    return jsonify({"message":message})
     
 
 @usersv1.route('/auth/login', methods = ['POST'])
@@ -89,13 +92,6 @@ def login():
         auth = request.get_json()
         if not auth or not auth['email'] or not auth['password']:
                 return make_response(("Authorize with email and password"), 401)
-
-        """user_profiles = []
-        for user in database:
-                user_profiles.append({'email':user['details'].email,
-                                  'password':user['details'].password,
-                                  'user_id':user['user_id'],
-                                  'businesses':user['businesses']})"""
 
         user = [user for user in database if user['details'].email == auth['email']]
         if len(user) == 0 :
@@ -129,4 +125,4 @@ def logout(current_user):
             token = request.headers['access_token']
             token = None
             return jsonify({'message':"Successfully logged out"})
-        return make_response(("Not logged out"), 200)
+        return make_response(("Token required"), 499)

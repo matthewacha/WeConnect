@@ -5,10 +5,10 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 app.config.from_object('config')
 
-swagger=Swagger(app)
-
 db = SQLAlchemy(app)
 db.init_app(app)
+
+swagger=Swagger(app)
 
 from app.v2 import models
 

@@ -1,0 +1,45 @@
+Endpoint to register a new business
+---
+tags:
+  - Business
+parameters:
+  - name: body
+    description: a json object with business details
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - "name"
+        - "description"
+        - "category"
+        - "location"
+      properties:
+        name:
+          type: "string"
+          example: "Fish To Go"
+        description:
+          type: "string"
+          example: "We export fish"
+        category:
+          type: "string"
+          example: "Food"
+        location:
+          type: "string"
+          example: "Kampala"
+  - name: Authorization
+    description: A json web token to be used for each request
+    type: string
+    in: header
+    required: true
+
+responses:
+  200:
+    description: Business successfuly created
+    schema: 
+      type: object
+      properties:
+        message:
+          type: string
+          enum:
+            - "Successfully added business"
