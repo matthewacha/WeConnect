@@ -1,5 +1,6 @@
 from flask import Flask
 from flasgger import Swagger
+from flask_script import Manager
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -7,6 +8,16 @@ app.config.from_object('config')
 
 db = SQLAlchemy(app)
 db.init_app(app)
+manager = Manager(app)
+
+@manager.command
+def test():
+    """Runs the unit tests without test coverage."""
+    tests = unittest.TestLoader().discover('./tests', pattern='test*.py')
+    result = unittest.TextTestRunner(verbosity=2).run(tests)
+    if result.wasSuccessful():
+        return 0
+    return 1
 
 swagger=Swagger(app)
 
