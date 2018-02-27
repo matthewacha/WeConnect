@@ -49,4 +49,25 @@ def view_business(id):
         output['category'] = business.category
         return jsonify({"business":output})
     return make_response(("Business does not exist"), 401)
-        
+
+
+@businessesv2.route('/businesses/<id>', methods=['PUT'])
+def update_business(id):
+    data = request.get_json()
+    business = models.Business.query.filter_by(id=id).first()
+    if business:
+        business.name = data['new_name']
+        business.description=data['new_description']
+        business.location = data['new_location']
+        business.category = data['new_category']
+        return jsonify({"mesage":"Successfully updated"})
+    return make_response(("Business does not exist"), 401)
+
+@businessesv2.route('/businesses/<id>', methods = ['DELETE'])
+def delete_business(id):
+    business = models.Business.query.filter_by(id=id).first()
+    if business:
+        db.session.delete(business)
+        db.session.commit()
+        return jsonify({"message":"Successfully deleted"})
+    return make_response(("Business does not exist"),401)
