@@ -8,7 +8,7 @@ from . import users#pragma:no cover
 from app import app, db, models#pragma:no cover
 from json import dumps#pragma:no cover
 
-@users.route('/api/v2/auth/register', methods = ['POST'])
+@users.route('/auth/register', methods = ['POST'])
 def add_new_user():
     json_data = request.get_json()
     user = models.User(email = json_data['email'],
@@ -23,3 +23,6 @@ def add_new_user():
     db.session.close()
     return jsonify({'message':message})
 
+@users.route('/auth/login', methods = ['POST'])
+def login():
+    pass

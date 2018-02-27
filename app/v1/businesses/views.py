@@ -4,7 +4,8 @@ import jwt
 from flask import Flask, jsonify, request, session, make_response, abort
 from flasgger import swag_from
 from werkzeug.security import generate_password_hash, check_password_hash
-from app.v1.users.views import database, Business, generate_id, token_required
+from app.v1.modals import database, Business, generate_id
+from app.v1.users.views import token_required
 from functools import wraps
 from . import businessesv1
 from json import dumps

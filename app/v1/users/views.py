@@ -6,50 +6,11 @@ from flask import Flask, jsonify, request, session, make_response, abort
 from flasgger import swag_from
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
+from app.v1.modals import database, generate_id, User
 from . import usersv1
 from json import dumps
 
 secret_key = "its_so_secret_1945"
-
-database = []
-
-###helper methods###
-def generate_id():
-        id = random.uniform(5,500000)
-        id *= 100000
-        id = int(id)
-        return id
-
-class User(object):
-        def __init__(self, email, password):
-                self.email = email
-                self.password = password
-
-        def change_password(self, new_password):
-                self.password = new_password
-               
-        def email(self):
-                return self.email
-        
-        def password(self):
-                return self.password
-
-class Business(object):
-        def __init__(self, name,description, location, category, user_id):
-                self.name = name
-                self.description = description
-                self.location = location
-                self.category = category
-                self.user_id = user_id
-
-        def change_name(self,new_name):
-                self.name = new_name
-                
-        def change_location(self,new_location):
-                self.location = location
-                
-        def change_category(self,new_category):
-                self.category = new_category
 
 def token_required(funct):
     @wraps(funct)
