@@ -1,0 +1,7 @@
+[run]
+source = app
+[report]
+omit = *wenv
+*.pyc
+*.html
+*.js
