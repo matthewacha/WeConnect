@@ -12,7 +12,7 @@ from json import dumps
 secret_key = "its_so_secret_1945"
 businesses_db = []
 
-@businessesv1.route('/api/businesses', methods = ['POST'])
+@businessesv1.route('/businesses', methods = ['POST'])
 @swag_from('./api-docs/v1/register_business.yml')
 @token_required
 def register(current_user):
@@ -27,7 +27,7 @@ def register(current_user):
 
 
 
-@businessesv1.route('/api/businesses/<name>', methods = ['GET'])
+@businessesv1.route('/businesses/<name>', methods = ['GET'])
 @swag_from('./api-docs/v1/view_business.yml')
 def retrieve_business(name):
     output = []
@@ -54,7 +54,7 @@ def retrieve_business(name):
         message = business_out
     return jsonify({"business":message[0]})
 
-@businessesv1.route('/api/businesses', methods = ['GET'])
+@businessesv1.route('/businesses', methods = ['GET'])
 @swag_from('./api-docs/v1/view_businesses.yml')
 def retrieve_businesses():
     output = []
@@ -76,7 +76,7 @@ def retrieve_businesses():
 
     return jsonify({"businesses":message})
 
-@businessesv1.route('/api/businesses/<name>', methods = ['PUT'])
+@businessesv1.route('/businesses/<name>', methods = ['PUT'])
 @swag_from('./api-docs/v1/update_business.yml')
 @token_required
 def edit_business(current_user, name):
@@ -99,7 +99,7 @@ def edit_business(current_user, name):
                 
     return jsonify({"message":message })
 
-@businessesv1.route('/api/businesses/<name>', methods = ['DELETE'])
+@businessesv1.route('/businesses/<name>', methods = ['DELETE'])
 @swag_from('./api-docs/v1/delete_business.yml')
 @token_required
 def delete_business(current_user, name):
@@ -114,7 +114,7 @@ def delete_business(current_user, name):
             message = "You are not authorized"
     return jsonify({"message":message})
 
-@businessesv1.route('/api/businesses/<name>/reviews', methods = ['POST'])
+@businessesv1.route('/businesses/<name>/reviews', methods = ['POST'])
 @swag_from('./api-docs/v1/post_review.yml')
 @token_required
 def post_review(current_user, name):
@@ -124,12 +124,10 @@ def post_review(current_user, name):
         if business["details"].name == name:
             business['reviews'].append(review)
             message = "Successfully added review"
-        else:
-            message = "Business does not exist"
     return jsonify({"message":message})
 
 
-@businessesv1.route('/api/businesses/<name>/reviews', methods = ['GET'])
+@businessesv1.route('/businesses/<name>/reviews', methods = ['GET'])
 @swag_from('./api-docs/v1/view_reviews.yml')
 @token_required
 def view_reviews(current_user, name):

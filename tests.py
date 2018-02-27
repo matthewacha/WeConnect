@@ -34,7 +34,7 @@ class TestUserApi(BaseTestCase):
     ################
     def test_sign_up_user(self):
         response = self.tester.post('/api/v1/auth/register',content_type = 'application/json',
-                                   data = json.dumps( dict(email='me@gmail.com',
+                                   data = json.dumps( dict(email='mem@gmail.com',
                                                         password='greater')))
         self.assertIn(u'Successfully signed up', response.data)
         self.assertTrue(response.content_type == 'application/json')
@@ -144,7 +144,7 @@ class TestUserApi(BaseTestCase):
                                                           location = 'Kampala',
                                                           category = "Food")),
                                     headers =dict(access_token = result['token']))#pragma:no cover
-        data = json.loads(response.data.decode())#pragma:no cover
+        #data = json.loads(response.data.decode())#pragma:no cover
         self.assertIn(u'Successfully added business',response.data)#pragma:no cover
         self.assertEqual(response.status_code, 200)
 

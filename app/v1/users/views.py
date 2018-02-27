@@ -78,7 +78,7 @@ def add_user():
                     'user_id':generate_id(),
                     'businesses':[]}
     user = [user for user in database if user['details'].email == json_data['email']]
-    if len(user) > 0:
+    if len(user) == 0:
         database.append(user_profile)
         message = 'Successfully signed up'
     else:
