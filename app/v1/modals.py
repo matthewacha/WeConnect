@@ -1,3 +1,4 @@
+import random
 database = []
 
 def generate_id():

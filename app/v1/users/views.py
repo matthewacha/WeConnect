@@ -1,5 +1,4 @@
 import os
-import random
 import jwt
 import datetime
 from flask import Flask, jsonify, request, session, make_response, abort
