@@ -4,7 +4,7 @@ import json
 from app import app
 from app.v1 import users
 from app.v1.users import views as users
-from.app.v1.modals import Business
+from app.v1.modals import Business
     
 
 class BaseTestCase(unittest.TestCase):

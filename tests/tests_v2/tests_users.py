@@ -8,6 +8,7 @@ from app.v1.users import views as users
 class BaseTest(unittest.TestCase):
     def setUp(self):
         self.tester = app.test_client(self)
+        db.create_all()
 
     def tearDown(self):
         db.session.remove()
