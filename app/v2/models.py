@@ -25,7 +25,7 @@ class Business(db.Model):
     reviews_id = db.Column(db.Integer, db.ForeignKey('reviews.id'))
     user = db.relationship('User', backref='businesses',
                                  lazy='dynamic')
-    def __init__(self, name, description):
+    def __init__(self, name, description, location, category):
         self.name = name#pragma:no cover
         self.description = description#pragma:no cover
         self.location = location
