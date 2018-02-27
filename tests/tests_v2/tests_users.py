@@ -1,8 +1,6 @@
 import unittest
 import json
 from app import app, db
-from app.v1 import users
-from app.v1.users import views as users
 #from app.businesses import views as businesses
 
 class BaseTest(unittest.TestCase):

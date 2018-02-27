@@ -4,7 +4,7 @@ import json
 from app import app
 from app.v1 import users
 from app.v1.users import views as users
-from app.v1.modals import Business
+from app.v1.modals import Business, User
     
 
 class BaseTestCase(unittest.TestCase):
@@ -20,11 +20,11 @@ class TestUserApi(BaseTestCase):
     ##TEST ClASSES##
     ################
     def test_Users(self):
-        user = users.User('james@gmail.com', 'latina' )
+        user = User('james@gmail.com', 'latina' )
         self.assertEqual(user.email,'james@gmail.com' )
 
     def test_Businesses(self):
-        business = users.Business("Fish To Go","We fish", "Kampala", "Foods",1111)
+        business = Business("Fish To Go","We fish", "Kampala", "Foods",1111)
         self.assertEqual(business.name, "Fish To Go")
         new_name = business.change_name("Fishes")
         self.assertEqual(business.name, "Fishes")
