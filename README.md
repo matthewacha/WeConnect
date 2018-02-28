@@ -32,6 +32,8 @@ clone the repo
 
 `$git clone https://github.com/matthewacha/WeConnect.git`
 
+![alt text](screenshots/clone.png "Clone from repository")
+
 Setup your database, if you do not have postgresql installed please click on the 
 link above.
 
@@ -42,9 +44,6 @@ Navigate to `__init__.py` in the app folder and set config environment to `confi
 
 For windows, run the 
 `setup.bat`
-
-For Linux, cygwin, OS X run 
-`setup.sh` 
 
 The above setup file will install and initialise a virtual environment, install dependencies using `pip`
 and run the server.
@@ -89,6 +88,14 @@ Use the following endpoints to demo version 2
 |[GET/api/v2/businesses/<id>/reviews](http://127.0.0.1:5000/apidocs/#!/Review/get_api_v2_businesses_id_reviews)|Get all reviews for a business|
 
 For more about using the API check 127.0.0.1:5000/apidocs
+
+User endpoints window 
+
+![alt text](screenshots/user_doc.png "User endpoints documentation")
+
+Business endpoints window 
+
+![alt text](screenshots/bus_doc.png "Business endpoints documentation")
 
  
 Thank you for using WeConnect
