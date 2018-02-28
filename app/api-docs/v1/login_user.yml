@@ -1,0 +1,53 @@
+Endpoint to login a registered user
+---
+tags:
+  - User
+parameters:
+  - name: body
+    description: This contains login details
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - "email"
+        - "password"
+      properties:
+        username:
+          type: "string"
+          example: "me@gmail.com"
+        password:
+          type: "string"
+          format: password
+          example: "animals"
+
+responses:
+  200:
+    description: User login successful
+    schema: 
+      type: object
+      properties:
+        message:
+          type: string
+          enum:
+            - "You logged in successfully."
+        access_token:
+          type: string      
+  401:
+    description: User crdentials wrong
+    schema: 
+      type: object
+      properties:
+        message:
+          type: string
+          enum:
+            - "Authorize with email and password"
+            - "Authorize with correct credentials"
+            - "Authorize with correct password"
+  500:
+    description: Internal server Error
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
