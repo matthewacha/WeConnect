@@ -13,7 +13,7 @@ class BaseTestCase(unittest.TestCase):
         users.Business = []
         
 class TestUserApi(BaseTestCase):
-    #ensure reviews can be added for business
+    """ensure reviews can be added for business"""
     def test_add_review(self):
         self.tester.post('/api/v1/auth/register',content_type='application/json',
                                    data =json.dumps( dict(
@@ -38,8 +38,8 @@ class TestUserApi(BaseTestCase):
         self.assertIn(u'Successfully added review', response.data)
         self.assertEqual(response.status_code, 200)
 
-    #ensure reviews can be viewed for business
     def test_view_reviews(self):
+        """ensure reviews can be viewed for business"""
         self.tester.post('/api/v1/auth/register',content_type='application/json',
                                    data =json.dumps( dict(
                                                         email='jh@gmail.com',
@@ -73,3 +73,6 @@ class TestUserApi(BaseTestCase):
 
         self.assertIn(u'Amazing place', response.data)
         self.assertEqual(response.status_code, 200)
+
+if __name__=='__main__':
+    unittest.main()

@@ -52,6 +52,7 @@ class TestUserApi(BaseTest):
                                     data = json.dumps(dict(email = 'me@gmail.com',
                                                            password = 'animal')))
         self.assertEqual(response.status_code, 200)
+        
 
     def test_invalid_login(self):
         """test that a user cannot signup with incorrect password"""
