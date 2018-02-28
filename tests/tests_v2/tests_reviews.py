@@ -88,9 +88,9 @@ class TestUserApi(BaseTestCase):
                                     headers = dict(access_token = result['token']))
         self.assertIn(u'Business does not exist', response.data)
         self.assertEqual(response.status_code, 401)
-        
+"""        
     def test_view_reviews(self):
-        """ensure reviews can be viewed for business"""
+        ensure reviews can be viewed for business
         self.tester.post('/api/v2/auth/register',content_type='application/json',
                                    data =json.dumps( dict(
                                                         email='jh@gmail.com',
@@ -116,7 +116,7 @@ class TestUserApi(BaseTestCase):
                                    headers=dict(access_token=result['token']))
 
         self.assertIn(u'Amazing place', response.data)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)"""
 
 if __name__ == '__main__':
     unittest.main()
