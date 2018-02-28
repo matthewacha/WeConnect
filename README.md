@@ -21,7 +21,9 @@ PRE-REQUISITES
 For developers, you need to have installed the following
 
 1. Python 2.7
+
 2. GitSys
+
 3.[Postgresql](https://www.postgresql.org/download/)
 
 Setup and Installation
