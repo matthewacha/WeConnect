@@ -61,32 +61,32 @@ Input `http:127.0.0.1:5000/` followed by any of the following endpoints to demo 
 |EndPoint|Functionality|
 |---------|------------|
 |[POST/api/v1/auth/register](http://127.0.0.1:5000/apidocs/#!/User/post_api_v1_auth_register)|Creates a user account|
-|[POST/api/v1/auth/login](#)|Logs in a user|
+|[POST/api/v1/auth/login](http://127.0.0.1:5000/apidocs/#!/User/post_api_v1_auth_login)|Logs in a user|
 |[POST/api/v1/auth/logout](http://127.0.0.1:5000/apidocs/#!/User/post_api_v1_auth_logout)|Logs out a user|
-|[POST/api/v1/auth/reset-password](#)|Password reset|
+|[POST/api/v1/auth/reset-password](http://127.0.0.1:5000/apidocs/#!/User/post_api_v1_auth_reset_password)|Password reset|
 |[POST/api/v1/businesses](http://127.0.0.1:5000/apidocs/#!/Business/post_api_v1_businesses)|Register a business|
-|[PUT/api/v1/businesses/<name>](#)|Updates a business profile|
+|[PUT/api/v1/businesses/<name>](http://127.0.0.1:5000/apidocs/#!/Business/put_api_v1_businesses_name)|Updates a business profile|
 |[DELETE/api/v1/businesses/<name>](http://127.0.0.1:5000/apidocs/#!/Business/delete_api_v1_businesses_name)|Remove a business|
 |[GET/api/v1/businesses](http://127.0.0.1:5000/apidocs/#!/Business/get_api_v1_businesses)|Retrieves all businesses|
-|[GET/api/v1/businesses/<name>](#)|Get a business|
+|[GET/api/v1/businesses/<name>](http://127.0.0.1:5000/apidocs/#!/Business/get_api_v1_businesses_name)|Get a business|
 |[POST/api/v1/businesses/<name>/reviews](http://127.0.0.1:5000/apidocs/#!/Review/post_api_v1_businesses_name_reviews)|Add a review for a business|
-|[GET/api/v1/businesses/<name>/reviews](#)|Get all reviews for a business|
+|[GET/api/v1/businesses/<name>/reviews](http://127.0.0.1:5000/apidocs/#!/Review/get_api_v1_businesses_name_reviews)|Get all reviews for a business|
 
 Use the following endpoints to demo version 2
 
 |EndPoint|Functionality|
 |---------|------------|
-|[POST/api/v2/auth/register](#)|Creates a user account|
-|[POST/api/v2/auth/login](#)|Logs in a user|
-|[POST/api/v2/auth/logout](#)|Logs out a user|
-|[POST/api/v2/auth/reset-password](#)|Password reset|
-|[POST/api/v2/businesses](#)|Register a business|
-|[PUT/api/v2/businesses/<name>](#)|Updates a business profile|
-|[DELETE/api/v2/businesses/<name>](#)|Remove a business|
-|[GET/api/v2/businesses](#)|Retrieves all businesses|
-|[GET/api/v2/businesses/<name>](#)|Get a business|
-|[POST/api/v2/businesses/<name>/reviews](#)|Add a review for a business|
-|[GET/api/v2/businesses/<name>/reviews](#)|Get all reviews for a business|
+|[POST/api/v2/auth/register](http://127.0.0.1:5000/apidocs/#!/User/post_api_v2_auth_register)|Creates a user account|
+|[POST/api/v2/auth/login](http://127.0.0.1:5000/apidocs/#!/User/post_api_v2_auth_login)|Logs in a user|
+|[POST/api/v2/auth/logout](http://127.0.0.1:5000/apidocs/#!/User/post_api_v2_auth_logout)|Logs out a user|
+|[POST/api/v2/auth/reset-password](http://127.0.0.1:5000/apidocs/#!/User/post_api_v2_auth_reset_password)|Password reset|
+|[POST/api/v2/businesses](http://127.0.0.1:5000/apidocs/#!/Business/post_api_v2_businesses)|Register a business|
+|[PUT/api/v2/businesses/<id>](http://127.0.0.1:5000/apidocs/#!/Business/put_api_v2_businesses_id)|Updates a business profile|
+|[DELETE/api/v2/businesses/<id>](http://127.0.0.1:5000/apidocs/#!/Business/delete_api_v2_businesses_id)|Remove a business|
+|[GET/api/v2/businesses](http://127.0.0.1:5000/apidocs/#!/Business/get_api_v2_businesses)|Retrieves all businesses|
+|[GET/api/v2/businesses/<id>](http://127.0.0.1:5000/apidocs/#!/Business/get_api_v2_businesses_id)|Get a business|
+|[POST/api/v2/businesses/<id>/reviews](http://127.0.0.1:5000/apidocs/#!/Review/post_api_v2_businesses_id_reviews)|Add a review for a business|
+|[GET/api/v2/businesses/<id>/reviews](http://127.0.0.1:5000/apidocs/#!/Review/get_api_v2_businesses_id_reviews)|Get all reviews for a business|
 
 For more about using the API check 127.0.0.1:5000/apidocs
 
