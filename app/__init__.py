@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
 app = Flask(__name__)
-app.config.from_object('config.Development')
+app.config.from_object('config.Deployment')
 app.config['SWAGGER'] = {
             'swagger': '2.0',
             'title': 'we-connect-api',
