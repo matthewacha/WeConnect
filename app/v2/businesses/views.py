@@ -10,7 +10,7 @@ from app.v2.users.views import token_required
 from . import businessesv2
 
 @businessesv2.route('/businesses', methods = ['POST'])
-#@swag_from('../api-docs/v2/register_business.yml')
+@swag_from('../api-docs/v1/register_business.yml')
 @token_required
 def register_business(current_user):
     data = request.get_json()
@@ -30,7 +30,7 @@ def register_business(current_user):
     return jsonify({"message":message})
 
 @businessesv2.route('/businesses', methods = ['GET'])
-#@swag_from('../api-docs/v1/view_businesses.yml')
+@swag_from('../api-docs/v1/view_businesses.yml')
 @token_required
 def view_businesses(current_user):
     businesses = models.Business.query.all()
@@ -45,7 +45,7 @@ def view_businesses(current_user):
     return jsonify({"businesses":all_businesses})
 
 @businessesv2.route('/businesses/<id>', methods = ['GET'])
-#@swag_from('../api-docs/v1/view_business.yml')
+@swag_from('../api-docs/v1/view_business.yml')
 @token_required
 def view_business(current_user, id):
     business = models.Business.query.filter_by(id=id).first()
@@ -61,6 +61,7 @@ def view_business(current_user, id):
 
 
 @businessesv2.route('/businesses/<id>', methods=['PUT'])
+@swag_from('../api-docs/v1/update_business.yml')
 @token_required
 def update_business(current_user, id):
     data = request.get_json()
@@ -74,6 +75,7 @@ def update_business(current_user, id):
     return make_response(("Business does not exist"), 401)
 
 @businessesv2.route('/businesses/<id>', methods = ['DELETE'])
+@swag_from('../api-docs/v1/delete_business.yml')
 @token_required
 def delete_business(current_user, id):
     business = models.Business.query.filter_by(id=id).first()
@@ -84,6 +86,7 @@ def delete_business(current_user, id):
     return make_response(("Business does not exist"),401)
 
 @businessesv2.route('/businesses/<id>/reviews', methods=['POST'])
+@swag_from('../api-docs/v1/post_review.yml')
 @token_required
 def add_review(current_user, id):
     data=request.get_json()
@@ -101,6 +104,7 @@ def add_review(current_user, id):
     return jsonify({"messgae":message})
 
 @businessesv2.route('/businesses/<id>/reviews', methods=['GET'])
+@swag_from('../api-docs/v1/view_reviews.yml')
 #@token_required
 def view_reviews(id):
     data=request.get_json()

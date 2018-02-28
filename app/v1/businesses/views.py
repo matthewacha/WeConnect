@@ -29,7 +29,7 @@ def register(current_user):
 
 
 @businessesv1.route('/businesses/<name>', methods = ['GET'])
-#@swag_from('../api-docs/v1/view_business.yml')
+@swag_from('../api-docs/v1/view_business.yml')
 def retrieve_business(name):
     output = []
     for business in businesses_db:
@@ -78,7 +78,7 @@ def retrieve_businesses():
     return jsonify({"businesses":message})
 
 @businessesv1.route('/businesses/<name>', methods = ['PUT'])
-#@swag_from('../api-docs/v1/update_business.yml')
+@swag_from('../api-docs/v1/update_business.yml')
 @token_required
 def edit_business(current_user, name):
     data = request.get_json()
@@ -129,7 +129,7 @@ def post_review(current_user, name):
 
 
 @businessesv1.route('/businesses/<name>/reviews', methods = ['GET'])
-#@swag_from('./api-docs/v1/view_reviews.yml')
+@swag_from('../api-docs/v1/view_reviews.yml')
 @token_required
 def view_reviews(current_user, name):
     all_reviews = []

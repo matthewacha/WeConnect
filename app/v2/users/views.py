@@ -30,7 +30,7 @@ def token_required(funct):
     return decorated_funct
 
 @users.route('/auth/register', methods = ['POST'])
-#@swag_from('../api-docs/v2/register_user.yml')
+@swag_from('../api-docs/v1/register_user.yml')
 def add_new_user():
     json_data = request.get_json()
     user = models.User(email = json_data['email'],
@@ -46,6 +46,7 @@ def add_new_user():
     return jsonify({'message':message})
 
 @users.route('/auth/login', methods = ['POST'])
+@swag_from('../api-docs/v1/login.yml')
 def login():
     data=request.get_json()
     if not data['email'] or not data['password']:
@@ -63,6 +64,7 @@ def login():
     return make_response(("Login with correct password"), 401)
 
 @users.route('/auth/reset_password', methods = ['POST'])
+@swag_from('../api-docs/v1/reset_password.yml')
 @token_required
 def reset_password(current_user):
     data = request.get_json()
@@ -77,6 +79,6 @@ def reset_password(current_user):
     return make_response(("Input correct old password"), 401)
 
 @users.route('/auth/logout', methods = ['POST'])
-#@swag_from('../api-docs/v2/logout_user.yml')
+@swag_from('../api-docs/v1/logout_user.yml')
 def logout():
     return make_response(("Successfully logged out"), 200)

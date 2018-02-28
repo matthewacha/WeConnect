@@ -47,7 +47,7 @@ def add_user():
     
 
 @usersv1.route('/auth/login', methods = ['POST'])
-#@swag_from('../api-docs/v1/login.yml')
+@swag_from('../api-docs/v1/login.yml')
 def login():
         auth = request.get_json()
         if not auth or not auth['email'] or not auth['password']:
@@ -66,7 +66,7 @@ def login():
         return make_response(("Authorize with correct password"), 401)
 
 @usersv1.route('/auth/reset-password', methods = ['POST'])
-#@swag_from('../api-docs/v1/reset_password.yml')
+@swag_from('../api-docs/v1/reset_password.yml')
 @token_required
 def reset_password(current_user):
         cred = request.get_json()
