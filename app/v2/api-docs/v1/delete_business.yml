@@ -1,4 +1,4 @@
-Endpoint to update business information using an id value
+Endpoint to delete business information using an id value
 ---
 tags:
   - Business
@@ -16,16 +16,16 @@ parameters:
 
 responses:
   200:
-    description: Business detail update successful
+    description: Business deleted
     schema: 
       type: object
       properties:
-        "message":
+        "Message":
           type: object
           enum:
-          - "Successfully updated"
-  401:
-    description: No businesses found
+            - "Successfully deleted"
+  404:
+    description: No business found
     schema: 
       type: object
       properties:

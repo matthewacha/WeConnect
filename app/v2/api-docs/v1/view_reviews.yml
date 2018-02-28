@@ -1,7 +1,7 @@
-Endpoint to update business information using an id value
+Endpoint to get all of a business's reviews
 ---
 tags:
-  - Business
+  - Review
 parameters:
   - name: Authorization
     description: A json web token to be used for each request
@@ -16,20 +16,18 @@ parameters:
 
 responses:
   200:
-    description: Business detail update successful
+    description: Businesses found
     schema: 
       type: object
       properties:
-        "message":
-          type: object
-          enum:
-          - "Successfully updated"
-  401:
+        "reviews: ":
+          type: array
+  404:
     description: No businesses found
     schema: 
       type: object
       properties:
-        "Message":
+        "message: ":
           type: string
           enum:
-            - "Business does not exist"
+            - "No reviews"

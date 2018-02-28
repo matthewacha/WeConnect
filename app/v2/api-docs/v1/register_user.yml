@@ -4,7 +4,7 @@ tags:
   - User
 parameters:
   - name: body
-    description: this contains user login details
+    description: this contains user registration details
     in: body
     required: true
     schema:
@@ -23,12 +23,14 @@ parameters:
 
 responses:
   200:
-    description: User successfuly logged in
+    description: User successfuly registered
     schema: 
       type: object
       properties:
-        token:
+        message:
           type: string
+          enum:
+            - "Successfully signed up"
   400:
     description: User failed registration
     schema: 
@@ -37,8 +39,6 @@ responses:
         message:
           type: string
           enum:
-            - "Authorize with all credentials"
-            - "User does not exist"
-            - "Login with correct password"
+            - "User already exists"
 
   
