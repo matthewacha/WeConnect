@@ -87,7 +87,7 @@ Use the following endpoints to demo version 2
 |[POST/api/v2/businesses/<id>/reviews](http://127.0.0.1:5000/apidocs/#!/Review/post_api_v2_businesses_id_reviews)|Add a review for a business|
 |[GET/api/v2/businesses/<id>/reviews](http://127.0.0.1:5000/apidocs/#!/Review/get_api_v2_businesses_id_reviews)|Get all reviews for a business|
 
-For more about using the API check 127.0.0.1:5000/apidocs
+For more about using the API check 127.0.0.1:5000/apidocs or [`https://weconnect-w.herokuapp.com/apidocs/`](https://weconnect-w.herokuapp.com/apidocs/)
 
 User endpoints window 
 
