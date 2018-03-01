@@ -6,6 +6,10 @@ def generate_id():
         id *= 100000
         id = int(id)
         return id
+def generate_bizId(list):
+        count = len(list)
+        count += 1
+        return count
 
 class User(object):
         def __init__(self, email, password):

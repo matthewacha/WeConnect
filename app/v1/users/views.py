@@ -24,7 +24,7 @@ def token_required(funct):
                 user =[user for user in database if user['user_id'] == data["sub"]]
                 current_user = user[0]
             except:
-                return jsonify({"message":"Token is invalid"}), 401
+                return jsonify({"message":"Unauthorized access, please login"}), 401
             return funct(current_user, *args, **kwargs)
     return decorated_funct
     
