@@ -13,7 +13,7 @@ parameters:
         - "email"
         - "password"
       properties:
-        username:
+        email:
           type: "string"
           example: "me@gmail.com"
         password:

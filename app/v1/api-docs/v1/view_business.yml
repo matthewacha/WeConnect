@@ -22,3 +22,10 @@ responses:
       properties:
         "business":
           type: array
+  401:
+    description: Businesses not found
+    schema: 
+      type: object
+      properties:
+        "message":
+          type: array
