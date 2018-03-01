@@ -11,7 +11,7 @@ app.config['SWAGGER'] = {
             'title': 'we-connect-api',
             'description': "The we-connect-you app allows you to register a business and\
             make reviews of other businesses",
-            'basePath': '/api/v2/auth/register',
+            'basePath': '',
             'version': '0.0.1',
             'contact': {
                 'Developer': 'Matthew Wacha',
