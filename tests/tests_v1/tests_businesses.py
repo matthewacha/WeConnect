@@ -16,9 +16,6 @@ class BaseTestCase(unittest.TestCase):
         users.Business = []
 
 class TestUserApi(BaseTestCase):
-    ################
-    ##TEST ClASSES##
-    ################
     def test_Users(self):
         """Test user model"""
         user = User('james@gmail.com', 'latina' )
@@ -187,8 +184,7 @@ class TestUserApi(BaseTestCase):
 
         response = self.tester.delete('/api/v1/businesses/1',
                                       headers=dict(access_token=result['token']))#pragma:no cover
-        
-        #data = json.loads(response.data.decode())#pragma:no cover
+    
         self.assertEqual(response.status_code, 200)#pragma:no cover
         self.assertIn(u'Successfully deleted', response.data)#pragma:no cover
 
