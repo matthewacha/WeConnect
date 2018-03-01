@@ -110,16 +110,18 @@ def view_reviews(id):
     data=request.get_json()
     business = models.Business.query.filter_by(id=id).first()
     if business:
-        try:
-            #message = "yeahh"
-            all_reviews= models.Review.query.filter_by(businessId=id)
-            reviews =[]
-            for review in all_reviews:
-                output = {}
-                output['review']=review['description']
-                reviews.append(output)
-            return jsonify({"Reviews":reviews})
-        except:
-            return jsonify({"error": " required"}), 401
-    return make_response(("Business does not exist"),401)
+        all_reviews = models.Review.query.all()
+        reviews = []
+        for review in all_reviews:
+            output = {
+                'description':review.description,
+                'businessId':review.businessId}
+            reviews.append(output)
+        value = []
+        for review in reviews:
+            if review['businessId']:
+                value.append(review)
+        return jsonify({"Reviews":value})
+    else:
+        return make_response(("Business does not exist"), 401)
 
