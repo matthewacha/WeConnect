@@ -30,11 +30,10 @@ class TestUserApi(BaseTestCase):
                                                  category = "Food")),
                          headers = dict(access_token=result['token']))
         
-        response = self.tester.post('/api/v1/businesses/Restaurant/reviews',
+        response = self.tester.post('/api/v1/businesses/1/reviews',
                                     content_type = 'application/json',
                                     data = json.dumps(dict(review = "It's awesome")),
                                     headers = dict(access_token = result['token']))
-        #data = json.loads(response.data.decode())
         self.assertIn(u'Successfully added review', response.data)
         self.assertEqual(response.status_code, 200)
 
@@ -54,20 +53,20 @@ class TestUserApi(BaseTestCase):
                                                  location = 'Kampala',
                                                  category = "Food")),
                          headers = dict(access_token=result['token']))
-        self.tester.post('/api/v1/businesses/Restaurant/reviews',
+        self.tester.post('/api/v1/businesses/1/reviews',
                                     content_type = 'application/json',
                                     data = json.dumps(dict(review = "It's awesome")),
                                     headers = dict(access_token = result['token']))
-        self.tester.post('/api/v1/businesses/Restaurant/reviews',
+        self.tester.post('/api/v1/businesses/1/reviews',
                                     content_type = 'application/json',
                                     data = json.dumps(dict(review = "Amazing place")),
                                     headers = dict(access_token = result['token']))
-        self.tester.post('/api/v1/businesses/Restaurant/reviews',
+        self.tester.post('/api/v1/businesses/1/reviews',
                                     content_type = 'application/json',
                                     data = json.dumps(dict(review = "Chef Rico is the best!")),
                                     headers = dict(access_token = result['token']))
         
-        response = self.tester.get('/api/v1/businesses/Restaurant/reviews',
+        response = self.tester.get('/api/v1/businesses/1/reviews',
                                     content_type = 'application/json',
                                     headers = dict(access_token = result['token']))
 
